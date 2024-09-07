@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   dots_indicator: ^3.0.0
   animate_do: ^3.3.4
+  file_picker: ^8.1.2
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +67,7 @@ flutter:
       - assets/onboarding.png
       - assets/1.png
       - assets/2.png
+      - assets/file.svg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
