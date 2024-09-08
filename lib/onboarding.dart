@@ -1,6 +1,7 @@
 
 
 import 'package:animate_do/animate_do.dart';
+import 'package:app/farmerinfo.dart';
 import 'package:app/utils/appassets.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:app/verification.dart';
@@ -55,7 +56,7 @@ class _FoochiOnboardingViewState extends State<FoochiOnboardingView> {
               width: 130,
               onTap: () {
                 if (currentIndex == (onboardingList.length - 1)) {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => VerificationScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => FarmerInfo()));
                 } else {
                   pageController.nextPage(
                     duration: const Duration(milliseconds: 500),
