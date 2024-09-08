@@ -1,4 +1,6 @@
+import 'package:app/farmerinfo.dart';
 import 'package:app/onboarding.dart';
+import 'package:app/razorpay/razorpay.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const FoochiOnboardingView(),
+      home: FarmerInfo(),
     );
   }
 }
