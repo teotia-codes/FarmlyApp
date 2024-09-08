@@ -1,10 +1,33 @@
+import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
+import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
 import 'package:app/farmerinfo.dart';
 import 'package:app/onboarding.dart';
 import 'package:app/razorpay/razorpay.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+  
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => InventoryProvider(
+                exampleInventoryItems), // Replace with your actual provider
+          ),
+
+          // Add other providers here
+        ],
+        child: MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +58,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: FarmerInfo(),
+      home: FoochiOnboardingView(),
     );
   }
 }
