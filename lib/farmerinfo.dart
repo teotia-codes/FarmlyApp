@@ -106,9 +106,7 @@ class _FarmerInfo extends State<FarmerInfo> {
                   String aadhaarNumber = aadhaarController.text.trim();
                   String gstin = gstinController.text.trim();
               
-                  if (_validateAadhaar(aadhaarNumber) &&
-                      _validateGstin(gstin) &&
-                      selectedFilePath != null) {
+                  if (_validateAadhaar(aadhaarNumber)) {
                     // Proceed with verification logic
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Verification Successful!'),
