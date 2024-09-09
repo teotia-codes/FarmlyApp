@@ -1,0 +1,12 @@
+flutter_launcher_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/ic_launcher/192x192.png"
+  image_path_ios: "assets/ic_launcher/1024x1024.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  adaptive_icon_background: "assets/ic_launcher/bg.jpg" # only available for Android 8.0 devices and above
+  adaptive_icon_foreground: "assets/ic_launcher/192x192.png" # only available for Android 8.0 devices and above
+  adaptive_icon_monochrome: "assets/ic_launcher/192x192mono.png" # only available for Android 13 devices and above
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+  background_color_ios: "#ffc922"
