@@ -1,4 +1,5 @@
 
+import 'package:app/farmer_direc/inventory/model/exampleInventory.dart';
 import 'package:app/farmer_direc/inventory/view/farmer_inventory_grid_item.dart';
 import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
 import 'package:app/utils/appcolors.dart';
@@ -145,7 +146,7 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                                   if (price != null && kg != null) {
                                     context
                                         .read<InventoryProvider>()
-                                        .addItem(name, price, kg);
+                                        .addItem("1",name, price, kg, "12");
                                     Navigator.of(context).pop();
                                   }
                                 }

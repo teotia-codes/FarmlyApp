@@ -431,10 +431,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                           ),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text(
-                              "₹" +
-                                  exampleFarmer.revenueModel.totalProfit
-                                      .toStringAsFixed(1),
+                            child: Text("₹${exampleFarmers.revenueModel.totalProfit}",
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
                           )
@@ -450,7 +447,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => OrderView(
+                          builder: (_) => OrderView(farmerId: "farmerA123",
                                 initialSortOption: 'completed',
                               )));
                     },
@@ -489,7 +486,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => OrderView(
+                          builder: (_) => OrderView(farmerId: "farmerA123",
                                 initialSortOption: 'inTransit',
                               )));
                     },

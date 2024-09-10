@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 
-
 class RevenueModel {
   double totalRevenue;
   double totalProfit;
@@ -15,24 +14,24 @@ class RevenueModel {
       'totalProfit': totalProfit,
     };
   }
+
   factory RevenueModel.fromFirestore(Map<String, dynamic> data) {
     return RevenueModel(
       totalRevenue: data['totalRevenue'],
       totalProfit: data['totalProfit'],
     );
   }
-}
 
   // Method to calculate total revenue and profit
-   RevenueModel calculateRevenueAndProfit(List<OrderModel> orders) {
+  static RevenueModel calculateRevenueAndProfit(List<OrderModel> orders) {
     double totalRevenue = 0.0;
     double totalProfit = 0.0;
 
     for (var order in orders) {
-      totalRevenue += order.orders.values.first.amount;
+      double orderRevenue = order.itemPrice * order.itemCount;
+      totalRevenue += orderRevenue;
       // Random profit calculation (for demo purposes)
-      totalProfit += order.orders.values.first.amount *
-          Random().nextDouble(); // Example profit calculation
+      totalProfit += orderRevenue * Random().nextDouble(); // Example profit calculation
     }
 
     return RevenueModel(
@@ -40,4 +39,4 @@ class RevenueModel {
       totalProfit: totalProfit,
     );
   }
-
+}

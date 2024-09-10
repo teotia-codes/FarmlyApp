@@ -1,52 +1,80 @@
-
-
 import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
+import 'package:app/farmer_direc/dashboard/model/revenue_model.dart';
+import 'package:app/farmer_direc/orders/model/exampleOrders.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 
-class OrderViewModel {
-  final FarmerModel farmerModel;
+class OrderProvider extends ChangeNotifier {
+  List<OrderModel> _orders = [];
 
-  OrderViewModel({required this.farmerModel});
+  List<OrderModel> get orders => _orders;
 
+  // Add an order to the Firestore
+  Future<void> addOrder(String farmerId, OrderModel order) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('farmers')
+          .doc(farmerId)
+          .collection('orders')
+          .doc(order.orderID)
+          .set(order.toFirestore());
+      _orders.add(order);
+      notifyListeners();
+    } catch (e) {
+      print("Failed to add order: $e");
+    }
+  }
+
+  // Fetch orders from Firestore
+  Future<void> fetchOrders(String farmerId) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('farmers')
+          .doc(farmerId)
+          .collection('orders')
+          .get();
+
+      _orders = querySnapshot.docs
+          .map((doc) => OrderModel.fromFirestore(doc.data()))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      print("Failed to fetch orders: $e");
+    }
+  }
+
+  // Returns the number of completed orders
   int returnCompletedOrders() {
-    List<OrderModel> ordersList = farmerModel.orders;
-    int count = 0;
-    for (var orderModel in ordersList) {
-      for (var entry in orderModel.orders.entries) {
-        if (entry.value.status == OrderStatus.completed) {
-          count++;
-        }
-      }
-    }
-    return count;
+    return _orders.where((order) => order.status == OrderStatus.completed).length;
   }
 
+  // Returns the number of in-transit orders
   int returnInTransitOrders() {
-    List<OrderModel> ordersList = farmerModel.orders;
-    int count = 0;
-    for (var orderModel in ordersList) {
-      for (var entry in orderModel.orders.entries) {
-        if (entry.value.status == OrderStatus.inTransit) {
-          count++;
-        }
-      }
-    }
-    return count;
+    return _orders.where((order) => order.status == OrderStatus.inTransit).length;
   }
 
+  // Returns the number of canceled orders
   int returnCanceledOrders() {
-    List<OrderModel> ordersList = farmerModel.orders;
-    int count = 0;
-    for (var orderModel in ordersList) {
-      for (var entry in orderModel.orders.entries) {
-        if (entry.value.status == OrderStatus.canceled) {
-          count++;
-        }
-      }
-    }
-    return count;
+    return _orders.where((order) => order.status == OrderStatus.canceled).length;
+  }
+
+  // Calculate total amount of completed orders
+  double getTotalAmountOfCompletedOrders() {
+    return _orders
+        .where((order) => order.status == OrderStatus.completed)
+        .fold(0.0, (total, order) => total + (order.itemPrice * order.itemCount));
   }
 }
 
-OrderViewModel exampleOrderViewModel =
-    OrderViewModel(farmerModel: exampleFarmer);
+OrderProvider exampleOrderViewModel = OrderProvider();
+// Example FarmerModel with orders list
+FarmerModel exampleFarmer = FarmerModel(
+  name: 'John Doe',
+  id: 'farmerA123',
+  add: '123 Farm Lane',
+  credit: exampleTrueCredit, // Use an actual TrueCredit instance
+  // List of OrderModel instances
+  revenueModel: RevenueModel.calculateRevenueAndProfit(exampleOrders), // Initialize with default values
+);
+
