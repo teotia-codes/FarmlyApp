@@ -49,4 +49,4 @@ class OrderViewModel {
 }
 
 OrderViewModel exampleOrderViewModel =
-    OrderViewModel(farmerModel: exampleFarmerModel);
+    OrderViewModel(farmerModel: exampleFarmer);

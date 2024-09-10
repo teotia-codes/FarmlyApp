@@ -31,14 +31,25 @@ class FarmerModel {
       'revenue': revenueModel.toFirestore(),
     };
   }
+  factory FarmerModel.fromFirestore(Map<String, dynamic> data) {
+    return FarmerModel(
+      name: data['name'],
+      id: data['id'],
+      add: data['address'],
+      credit: TrueCredit.fromFirestore(data['credit']),
+      orders: (data['orders'] as List).map((order) => OrderModel.fromFirestore(order as Map<String, dynamic>)).toList(),
+      revenueModel: RevenueModel.fromFirestore(data['revenue']),
+    );
+  }
 }
-
+FarmerModel exampleFarmer = FarmerModel(
+    name: 'John Doe',
+    id: 'farmer123',
+    add: '123 Farm Road, Rural Area',
+    credit: exampleTrueCredit,
+    orders: exampleOrderModels,
+    revenueModel: calculateRevenueAndProfit(exampleOrderModels),
+  );
 List<double> exRatings = [4.2, 5.0, 3.2, 4.8, 3.5, 4.0, 3.9, 5.0, 5.0]; // Dummy ratings list
 TrueCredit exampleTrueCredit = TrueCredit(ratings: exRatings, cibilScore: 700); // Dummy CIBIL score
 
-
-FarmerModel exampleFarmerModel = FarmerModel(
-    name: "Farmer",
-    id: "01110",
-    orders: exampleOrderModels,
-    revenueModel: calculateRevenueAndProfit(exampleOrderModels), add: '', credit: exampleTrueCredit);

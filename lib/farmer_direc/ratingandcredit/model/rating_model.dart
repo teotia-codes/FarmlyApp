@@ -11,6 +11,12 @@ class TrueCredit {
       'cibilScore': cibilScore,
     };
   }
+ factory TrueCredit.fromFirestore(Map<String, dynamic> data) {
+    return TrueCredit(
+      ratings: List<double>.from(data['ratings']),
+      cibilScore: data['cibilScore'],
+    );
+  }
 
   double calculateTrueCreditScore() {
     if (ratings.isEmpty) {

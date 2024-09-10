@@ -8,6 +8,12 @@ class OrderModel {
       'orders': orders.map((key, value) => MapEntry(key, value.toFirestore())),
     };
   }
+  factory OrderModel.fromFirestore(Map<String, dynamic> data) {
+    return OrderModel(
+      orders: (data['orders'] as Map<String, dynamic>).map((key, value) =>
+        MapEntry(key, OrderDetails.fromFirestore(value as Map<String, dynamic>))),
+    );
+  }
 }
 
 class OrderDetails {
@@ -24,8 +30,16 @@ class OrderDetails {
       'rating': rating,
     };
   }
-}
+   factory OrderDetails.fromFirestore(Map<String, dynamic> data) {
+    return OrderDetails(
+      amount: data['amount'],
+      status: OrderStatus.values.firstWhere((e) => e.toString().split('.').last == data['status']),
+      rating: data['rating'],
+    );
+  }
 
+}
+ 
 
 enum OrderStatus {
   inTransit,
