@@ -1,14 +1,15 @@
+import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
-import 'package:flutter/material.dart';
 
 class OrderView extends StatefulWidget {
+  final String farmerId;
   final String? initialSortOption; // Nullable to allow default value
 
-  const OrderView({super.key, this.initialSortOption});
+  const OrderView({super.key, required this.farmerId, this.initialSortOption});
 
   @override
   State<OrderView> createState() => _OrderViewState();
@@ -20,18 +21,22 @@ class _OrderViewState extends State<OrderView> {
   @override
   void initState() {
     super.initState();
-    // Set default value if none is provided
     _selectedSortOption = widget.initialSortOption ?? 'All';
+    // Fetch orders when the screen is initialized
+    Future.microtask(() {
+      Provider.of<OrderProvider>(context, listen: false)
+          .fetchOrders(widget.farmerId);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<MapEntry<String, OrderDetails>> filteredOrders = exampleOrderModels
-        .expand((orderModel) => orderModel.orders.entries)
-        .where((entry) {
+    final orderProvider = Provider.of<OrderProvider>(context);
+    final orders = orderProvider.orders;
+
+    List<OrderModel> filteredOrders = orders.where((order) {
       if (_selectedSortOption == 'All') return true;
-      return _selectedSortOption ==
-          entry.value.status.toString().split('.').last;
+      return _selectedSortOption == order.status.toString().split('.').last;
     }).toList();
 
     return Scaffold(
@@ -95,63 +100,63 @@ class _OrderViewState extends State<OrderView> {
           SizedBox(width: 16),
         ],
       ),
-      body: ListView.separated(
-        padding: EdgeInsets.all(16),
-        itemCount: filteredOrders.length,
-        separatorBuilder: (context, index) => SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          final entry = filteredOrders[index];
-          final orderId = entry.key;
-          final orderDetails = entry.value;
+      body: orderProvider.orders.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.separated(
+              padding: EdgeInsets.all(16),
+              itemCount: filteredOrders.length,
+              separatorBuilder: (context, index) => SizedBox(height: 16),
+              itemBuilder: (context, index) {
+                final order = filteredOrders[index];
 
-          Color statusColor;
-          switch (orderDetails.status) {
-            case OrderStatus.inTransit:
-              statusColor = Colors.blue;
-              break;
-            case OrderStatus.completed:
-              statusColor = Colors.green;
-              break;
-            case OrderStatus.confirmed:
-              statusColor = Colors.orange;
-              break;
-            case OrderStatus.canceled:
-              statusColor = Colors.red;
-              break;
-            default:
-              statusColor = Colors.grey;
-          }
+                Color statusColor;
+                switch (order.status) {
+                  case OrderStatus.inTransit:
+                    statusColor = Colors.blue;
+                    break;
+                  case OrderStatus.completed:
+                    statusColor = Colors.green;
+                    break;
+                  case OrderStatus.confirmed:
+                    statusColor = Colors.orange;
+                    break;
+                  case OrderStatus.canceled:
+                    statusColor = Colors.red;
+                    break;
+                  default:
+                    statusColor = Colors.grey;
+                }
 
-          return ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            tileColor: AppColors.PaleYellow,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(color: AppColors.kBackground, width: 1),
+                return ListTile(
+                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  tileColor: AppColors.PaleYellow,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: AppColors.kBackground, width: 1),
+                  ),
+                  title: Text(
+                    'Order ID: ${order.orderID}',
+                    style: TextPref.opensans.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Amount: \₹${(order.itemPrice * order.itemCount).toStringAsFixed(2)}\nStatus: ${order.status.toString().split('.').last}',
+                    style: TextPref.opensans.copyWith(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.shopping_cart,
+                    color: statusColor,
+                  ),
+                );
+              },
             ),
-            title: Text(
-              'Order ID: $orderId',
-              style: TextPref.opensans.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.black,
-              ),
-            ),
-            subtitle: Text(
-              'Amount: \₹${orderDetails.amount.toStringAsFixed(2)}\nStatus: ${orderDetails.status.toString().split('.').last}',
-              style: TextPref.opensans.copyWith(
-                fontWeight: FontWeight.normal,
-                fontSize: 16,
-                color: Colors.grey[700],
-              ),
-            ),
-            trailing: Icon(
-              Icons.shopping_cart,
-              color: statusColor,
-            ),
-          );
-        },
-      ),
     );
   }
 }

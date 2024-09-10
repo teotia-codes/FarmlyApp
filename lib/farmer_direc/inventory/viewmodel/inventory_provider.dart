@@ -14,11 +14,13 @@ class InventoryProvider extends ChangeNotifier {
   }
 
   // Add an item
-  void addItem(String name, double price, double kg) {
+  void addItem(String itemID, String name, double price, double kg, String farmerID) {
     final newItem = FarmerInventoryItem(
+      itemId: itemID,
       name: name,
       price: price.toStringAsFixed(1),
       kgCount: kg.toString(),
+      farmerID: farmerID ,
       imageUrl:
           'default_image.jpg', // Set a default image or manage accordingly
     );

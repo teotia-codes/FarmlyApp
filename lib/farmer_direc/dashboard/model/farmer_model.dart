@@ -1,6 +1,7 @@
 
 
 import 'package:app/farmer_direc/dashboard/model/revenue_model.dart';
+import 'package:app/farmer_direc/orders/model/exampleOrders.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 import 'package:app/farmer_direc/ratingandcredit/model/rating_model.dart';
 // Farmer Model to Firestore
@@ -9,7 +10,7 @@ class FarmerModel {
   String id;
   TrueCredit credit;
   String add;
-  List<OrderModel> orders;
+  
   RevenueModel revenueModel;
 
   FarmerModel({
@@ -17,7 +18,7 @@ class FarmerModel {
     required this.id,
     required this.add,
     required this.credit,
-    required this.orders,
+    
     required this.revenueModel,
   });
 
@@ -27,7 +28,7 @@ class FarmerModel {
       'id': id,
       'address': add,
       'credit': credit.toFirestore(),
-      'orders': orders.map((order) => order.toFirestore()).toList(),
+      
       'revenue': revenueModel.toFirestore(),
     };
   }
@@ -37,18 +38,18 @@ class FarmerModel {
       id: data['id'],
       add: data['address'],
       credit: TrueCredit.fromFirestore(data['credit']),
-      orders: (data['orders'] as List).map((order) => OrderModel.fromFirestore(order as Map<String, dynamic>)).toList(),
+
       revenueModel: RevenueModel.fromFirestore(data['revenue']),
     );
   }
 }
-FarmerModel exampleFarmer = FarmerModel(
+FarmerModel exampleFarmers = FarmerModel(
     name: 'John Doe',
     id: 'farmer123',
     add: '123 Farm Road, Rural Area',
     credit: exampleTrueCredit,
-    orders: exampleOrderModels,
-    revenueModel: calculateRevenueAndProfit(exampleOrderModels),
+    
+    revenueModel: RevenueModel.calculateRevenueAndProfit(exampleOrders),
   );
 List<double> exRatings = [4.2, 5.0, 3.2, 4.8, 3.5, 4.0, 3.9, 5.0, 5.0]; // Dummy ratings list
 TrueCredit exampleTrueCredit = TrueCredit(ratings: exRatings, cibilScore: 700); // Dummy CIBIL score

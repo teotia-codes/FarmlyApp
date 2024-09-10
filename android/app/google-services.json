@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "95888944136",
+    "project_id": "farmly-2fd51",
+    "storage_bucket": "farmly-2fd51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:95888944136:android:5becaac93c61e60fc035bd",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAryBfswFB9mFeAw1Bs8Nptfq2UoCQ2If4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
