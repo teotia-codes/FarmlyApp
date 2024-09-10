@@ -2,6 +2,8 @@ import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/provider/farmer_retrieve.dart';
+import 'package:app/retailer_direc/pages/home_page.dart';
+import 'package:app/retailer_direc/pages/order_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: OrderView(farmerId: "farmerA123",),
+      home: HomePage(),
     );
   }
 }
