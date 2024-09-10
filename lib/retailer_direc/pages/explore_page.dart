@@ -1,6 +1,6 @@
-import 'package:agriculture/components/offers_carousel.dart';
-import 'package:agriculture/models/product.dart';
-import 'package:agriculture/widgets/filter_dialog_widget.dart';
+
+import 'package:app/retailer_direc/components/offers_carousel.dart';
+import 'package:app/retailer_direc/widgets/filter_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -13,6 +13,7 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -129,7 +130,7 @@ class ExplorePage extends StatelessWidget {
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: products.length,
+              itemCount: exampleProducts.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
@@ -137,7 +138,7 @@ class ExplorePage extends StatelessWidget {
                 childAspectRatio: 0.8,
               ),
               itemBuilder: (context, index) {
-                return ProductCard(product: products[index]);
+                return ProductCard(product: exampleProducts[index]);
               },
             ),
           ],

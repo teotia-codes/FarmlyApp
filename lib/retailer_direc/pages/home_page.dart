@@ -1,12 +1,14 @@
-import 'package:agriculture/pages/cart_page.dart';
-import 'package:agriculture/pages/explore_page.dart';
-import 'package:agriculture/pages/products_view.dart';
-import 'package:agriculture/pages/profile_page.dart';
-import 'package:agriculture/pages/service_page.dart';
+
+import 'package:app/farmer_direc/profile/view/farmer_profile_view.dart';
+import 'package:app/retailer_direc/pages/cart_page.dart';
+import 'package:app/retailer_direc/pages/explore_page.dart';
+import 'package:app/retailer_direc/pages/products_view.dart';
+import 'package:app/utils/appcolors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,38 +31,51 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       // drawer: Image.asset('farmhouse.png'),
       appBar: AppBar(
-        leading: Image.asset('assets/farmhouse.png'),
-        centerTitle: false,
-        title: Text(
-          "Farmly",
-          style: Theme.of(context).textTheme.headlineSmall,
-          textAlign: TextAlign.left,
-          
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton.filledTonal(
-              onPressed: () {},
-              icon: badges.Badge(
-                badgeContent: const Text(
-                  '3',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                ),
-                badgeStyle: const badges.BadgeStyle(badgeColor: Colors.green),
-                position: badges.BadgePosition.topEnd(top: -15, end: -12),
-                child: const Icon(IconlyBroken.notification),
-              ),
-            ),
+      backgroundColor: Colors.white,
+      toolbarHeight: size.height * 0.1,
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              height: size.height * 0.175,
+              width: size.width * 0.175,
+              child: Image.asset(
+                "assets/farmhouse.png",
+                alignment: Alignment.center,
+                fit: BoxFit.contain,
+              )),
+          SizedBox(
+            width: 2.5,
           ),
+          Text(
+            "FARMLY",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.teko(
+                color: Color(0xff046a38),
+                fontSize: 28,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.5),
+          )
         ],
       ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications_none_outlined),
+            color: AppColors.kBrandColor,
+            iconSize: 25,
+          ),
+        )
+      ],
+    ),
+
       body: pages[currentIndex],
       
       bottomNavigationBar: 

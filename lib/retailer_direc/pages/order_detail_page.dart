@@ -1,9 +1,10 @@
-import 'package:agriculture/models/order.dart';
+
+import 'package:app/retailer_direc/models/order.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
   const OrderDetailPage({super.key, required this.order});
-  final Order order;
+  final ROrderModel order;
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();

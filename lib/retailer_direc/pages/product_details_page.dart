@@ -1,6 +1,7 @@
-import 'package:agriculture/data/product.dart';
-import 'package:agriculture/models/product.dart';
-import 'package:agriculture/pages/farmer_info_page.dart';
+
+import 'package:app/farmerinfo.dart';
+import 'package:app/retailer_direc/data/product.dart';
+import 'package:app/retailer_direc/models/product.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -60,7 +61,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
-                image: AssetImage(widget.product.image),
+                image: AssetImage("assets/${widget.product.image}"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -80,7 +81,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            FarmerInfo(product: widget.product), // implement farmer model then push it
+                            FarmerInfo(), // implement farmer model then push it
 
                       ),
                     );
@@ -212,14 +213,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                      image: AssetImage(products[index].image),
+                      image: AssetImage(exampleProducts[index].image),
                       fit: BoxFit.cover,
                     ),
                   ),
                 );
               },
               separatorBuilder: (context, index) => const SizedBox(width: 10),
-              itemCount: products.length,
+              itemCount: exampleProducts.length,
             ),
           ),
           const SizedBox(height: 10),

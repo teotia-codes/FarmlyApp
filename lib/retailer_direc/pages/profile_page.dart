@@ -1,4 +1,4 @@
-import 'package:agriculture/pages/order_page.dart';
+import 'package:app/retailer_direc/pages/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -8,6 +8,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: ListView(
         children: [
           // PROFILE IMAGE

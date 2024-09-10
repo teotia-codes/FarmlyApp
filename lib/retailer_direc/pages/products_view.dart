@@ -1,8 +1,10 @@
-import 'package:agriculture/widgets/filter_dialog_widget.dart';
-import 'package:agriculture/widgets/product_card.dart';
-import 'package:agriculture/widgets/product_tile.dart';
+
+import 'package:app/retailer_direc/data/product.dart';
+import 'package:app/retailer_direc/widgets/filter_dialog_widget.dart';
+import 'package:app/retailer_direc/widgets/product_card.dart';
+import 'package:app/retailer_direc/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
-import '../data/product.dart';
+
 
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -19,6 +21,7 @@ class _ProductsViewState extends State<ProductsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -101,14 +104,14 @@ class _ProductsViewState extends State<ProductsView> {
             isListView ? ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: products.length,
+              itemCount: exampleProducts.length,
               itemBuilder: (context, index) {
-                return ProductTile(cartItem: products[index]);
+                return ProductTile(cartItem: exampleProducts[index]);
               },
             ) : GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: products.length,
+              itemCount: exampleProducts.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
@@ -116,7 +119,7 @@ class _ProductsViewState extends State<ProductsView> {
                 childAspectRatio: 0.8,
               ),
               itemBuilder: (context, index) {
-                return ProductCard(product: products[index]);
+                return ProductCard(product: exampleProducts[index]);
               },
             ),
 

@@ -1,5 +1,7 @@
-import 'package:agriculture/data/product.dart';
-import 'package:agriculture/widgets/cart_item_widget.dart';
+
+import 'package:app/razorpay/razorpay.dart';
+import 'package:app/retailer_direc/data/product.dart';
+import 'package:app/retailer_direc/widgets/cart_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -8,10 +10,11 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartItems = products.take(4).toList();
+    final cartItems = exampleProducts.take(4).toList();
     final totalPrice =
         cartItems.map((e) => e.price).reduce((acc, cur) => acc + cur);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -38,7 +41,9 @@ class CartPage extends StatelessWidget {
           // CHECKOUT BUTTON
           const SizedBox(height: 20),
           FilledButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_)=> RazorPayPage()));
+            },
             icon: const Icon(IconlyBold.arrowRight),
             label: const Text("Proceed to Checkout"),
           ),

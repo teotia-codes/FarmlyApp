@@ -1,11 +1,14 @@
+import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
+import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
 import 'package:flutter/material.dart';
-import '../data/product.dart';
 import '../models/product.dart';
+// Import your FarmerModel
 import '../widgets/product_card.dart';
 
 class FarmerInfo extends StatefulWidget {
-  const FarmerInfo({super.key, required this.product});
-  final Product product;
+  const FarmerInfo({super.key, required this.farmer});
+  final FarmerModel farmer; // Accept FarmerModel instance
+
   @override
   State<FarmerInfo> createState() => _FarmerInfoState();
 }
@@ -13,6 +16,20 @@ class FarmerInfo extends StatefulWidget {
 class _FarmerInfoState extends State<FarmerInfo> {
   @override
   Widget build(BuildContext context) {
+    // Extract product list from the farmer's inventory
+    List<Product> products = exampleInventoryItems
+        .where((item) => item.farmerID == widget.farmer.id) // Filter by farmer ID
+        .map((item) => Product(
+          name: item.name,
+          farmer: widget.farmer.name,
+          description: 'Description for ${item.name}', // You might want to improve the description
+          image: item.imageUrl,
+          price: double.tryParse(item.price) ?? 0.0,
+          unit: 'kg',
+          rating: 4.0, // Provide a default or calculated rating
+        ))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Farmer Details"),
@@ -38,78 +55,83 @@ class _FarmerInfoState extends State<FarmerInfo> {
               ),
             ),
           ),
-          const Center(
+          Center(
             child: Text(
-          "ID",
-            style: TextStyle(
-              fontWeight:FontWeight.w700,
-
-    )
+              widget.farmer.id, // Display farmer ID
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           // NAME
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:[
-          const Row(
-            children:[
-              Text("NAME: ",
-              style:TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )),
-              Text(
-                "Mak Mach",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                )
-              ),
-            ],
-          ),
-              const SizedBox(height: 10,),
-              const Row(
-                children:[
-                  Text("Address: ",
-                      style:TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
+            children: [
+              Row(
+                children: [
                   Text(
-                      "Chengalpattu",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      )
+                    "NAME: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.farmer.name, // Display farmer name
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height:10),
-              const Row(
-                children:[
-                  Text("CIBIL Score: ",
-                      style:TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
+              const SizedBox(height: 10),
+              Row(
+                children: [
                   Text(
-                      "120",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      )
+                    "Address: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.farmer.add, // Display farmer address
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height:20),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    "CIBIL Score: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "${widget.farmer.credit.cibilScore}", // Display CIBIL score from credit model
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               const Text(
                 "Products",
-                style:TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                )
+                ),
               ),
-              const SizedBox(height:15),
+              const SizedBox(height: 15),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -124,11 +146,8 @@ class _FarmerInfoState extends State<FarmerInfo> {
                   return ProductCard(product: products[index]);
                 },
               ),
-
-
             ],
           ),
-
         ],
       ),
     );
