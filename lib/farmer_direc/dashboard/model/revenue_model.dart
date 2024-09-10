@@ -15,6 +15,12 @@ class RevenueModel {
       'totalProfit': totalProfit,
     };
   }
+  factory RevenueModel.fromFirestore(Map<String, dynamic> data) {
+    return RevenueModel(
+      totalRevenue: data['totalRevenue'],
+      totalProfit: data['totalProfit'],
+    );
+  }
 }
 
   // Method to calculate total revenue and profit

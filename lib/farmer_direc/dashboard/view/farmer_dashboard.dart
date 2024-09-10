@@ -398,7 +398,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               "₹" +
-                                  exampleFarmerModel.revenueModel.totalRevenue
+                                  exampleFarmer.revenueModel.totalRevenue
                                       .toStringAsFixed(1),
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
@@ -433,7 +433,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               "₹" +
-                                  exampleFarmerModel.revenueModel.totalProfit
+                                  exampleFarmer.revenueModel.totalProfit
                                       .toStringAsFixed(1),
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
