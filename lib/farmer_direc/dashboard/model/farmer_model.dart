@@ -1,9 +1,8 @@
-
-
 import 'package:app/farmer_direc/dashboard/model/revenue_model.dart';
 import 'package:app/farmer_direc/orders/model/exampleOrders.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 import 'package:app/farmer_direc/ratingandcredit/model/rating_model.dart';
+
 // Farmer Model to Firestore
 class FarmerModel {
   String name;
@@ -32,6 +31,7 @@ class FarmerModel {
       'revenue': revenueModel.toFirestore(),
     };
   }
+
   factory FarmerModel.fromFirestore(Map<String, dynamic> data) {
     return FarmerModel(
       name: data['name'],
