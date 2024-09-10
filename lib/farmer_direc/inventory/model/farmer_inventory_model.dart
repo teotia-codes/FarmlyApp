@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 
 class FarmerInventoryItem {
   String imageUrl; // URL of the inventory item image
