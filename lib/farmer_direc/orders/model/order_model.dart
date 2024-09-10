@@ -1,21 +1,31 @@
 class OrderModel {
   Map<String, OrderDetails> orders;
 
-  OrderModel({
-    required this.orders,
-  });
+  OrderModel({required this.orders});
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'orders': orders.map((key, value) => MapEntry(key, value.toFirestore())),
+    };
+  }
 }
 
 class OrderDetails {
   double amount;
   OrderStatus status;
-  int rating = 0;
+  int rating;
 
-  OrderDetails({
-    required this.amount,
-    required this.status,
-  });
+  OrderDetails({required this.amount, required this.status, this.rating = 0});
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'amount': amount,
+      'status': status.toString().split('.').last,  // Store the status as a string
+      'rating': rating,
+    };
+  }
 }
+
 
 enum OrderStatus {
   inTransit,
