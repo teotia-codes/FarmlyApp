@@ -7,13 +7,18 @@ class RevenueModel {
   double totalRevenue;
   double totalProfit;
 
-  RevenueModel({
-    required this.totalRevenue,
-    required this.totalProfit,
-  });
+  RevenueModel({required this.totalRevenue, required this.totalProfit});
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'totalRevenue': totalRevenue,
+      'totalProfit': totalProfit,
+    };
+  }
+}
 
   // Method to calculate total revenue and profit
-  static RevenueModel calculateRevenueAndProfit(List<OrderModel> orders) {
+   RevenueModel calculateRevenueAndProfit(List<OrderModel> orders) {
     double totalRevenue = 0.0;
     double totalProfit = 0.0;
 
@@ -29,4 +34,4 @@ class RevenueModel {
       totalProfit: totalProfit,
     );
   }
-}
+

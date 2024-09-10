@@ -1,5 +1,6 @@
 
 import 'package:app/farmer_direc/crowdfunding/view/crowdfunding_view.dart';
+import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/ratingandcredit/model/rating_model.dart';
 import 'package:app/farmer_direc/ratingandcredit/view/credit_and_rating_view.dart';
