@@ -3,6 +3,7 @@ import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/ml/view/demand_forecast_view.dart';
+import 'package:app/ml/view/disease_detection.dart';
 import 'package:app/provider/farmer_retrieve.dart';
 import 'package:app/retailer_direc/models/ROrderViewModel.dart';
 import 'package:app/retailer_direc/pages/home_page.dart';
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: DemandForecastingScreen(),
+      home: DiseaseDetection(),
     );
   }
 }
