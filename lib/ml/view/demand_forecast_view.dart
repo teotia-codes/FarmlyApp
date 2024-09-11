@@ -9,23 +9,42 @@ class DemandForecastingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Demand Forecasting'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SfCartesianChart(
-          primaryXAxis: DateTimeAxis(
-            intervalType: DateTimeIntervalType.months,
-            dateFormat: DateFormat.yMMM(),
-          ),
-          primaryYAxis: NumericAxis(),
-          series: <CartesianSeries>[
-            SplineSeries<ChartData, DateTime>(
-              dataSource: _getChartData(),
-              xValueMapper: (ChartData data, _) => data.date,
-              yValueMapper: (ChartData data, _) => data.value,
-              name: 'Demand',
-              color: Colors.blue,
+      body: Center(
+        child: Container(
+          color: Color(0xFFFFF8E1), // Pale yellow background
+          padding: const EdgeInsets.all(16.0),
+          height: MediaQuery.of(context).size.height / 2, // Half screen height
+          child: SfCartesianChart(
+            backgroundColor: Colors.white,
+            borderColor: Colors.grey.shade300,
+            primaryXAxis: DateTimeAxis(
+              intervalType: DateTimeIntervalType.days,
+              dateFormat: DateFormat('d MMM'),
+              majorGridLines: MajorGridLines(width: 0),
+              axisLine: AxisLine(width: 2),
             ),
-          ],
+            primaryYAxis: NumericAxis(
+              majorGridLines: MajorGridLines(width: 0),
+              axisLine: AxisLine(width: 2),
+            ),
+            series: <SplineSeries<ChartData, DateTime>>[
+              SplineSeries<ChartData, DateTime>(
+                dataSource: _getChartData(),
+                xValueMapper: (ChartData data, _) => data.date,
+                yValueMapper: (ChartData data, _) => data.value,
+                color: Colors.blue,
+                splineType: SplineType.natural, // Smooth spline
+                markerSettings: MarkerSettings(
+                  isVisible: true, // Show markers
+                  shape: DataMarkerType.circle, // Circle markers
+                  color: Colors.blue.shade700,
+                  borderColor: Colors.white,
+                  borderWidth: 2,
+                ),
+                name: 'Demand',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -33,11 +52,11 @@ class DemandForecastingScreen extends StatelessWidget {
 
   List<ChartData> _getChartData() {
     return [
-      ChartData(DateTime(2024, 1, 1), 518.81),
-      ChartData(DateTime(2024, 2, 1), 658.81),
-      ChartData(DateTime(2024, 3, 1), 700.50),
-      ChartData(DateTime(2024, 4, 1), 750.25),
-      ChartData(DateTime(2024, 5, 1), 800.00), // Predicted 5th month sales
+      ChartData(DateTime(2024, 1, 15), 518.81),
+      ChartData(DateTime(2024, 1, 30), 658.81),
+      ChartData(DateTime(2024, 2, 15), 700.50),
+      ChartData(DateTime(2024, 2, 30), 750.25),
+      ChartData(DateTime(2024, 3, 15), 800.00), // Predicted 75th day
     ];
   }
 }
