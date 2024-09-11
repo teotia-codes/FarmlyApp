@@ -1,6 +1,6 @@
 class FarmerInventoryItem {
   String itemId; // Unique ID for the inventory item
-  String imageUrl; // URL of the inventory item image
+  String imageUrl = "rice.jpg"; // URL of the inventory item image
   String name; // Name of the inventory item
   String price; // Price of the item
   String kgCount; // Weight in kilograms

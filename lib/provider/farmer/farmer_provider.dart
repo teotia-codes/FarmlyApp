@@ -97,4 +97,19 @@ Future<void> addInventoryItems(String farmerId, FarmerInventoryItem item) async 
     return null;
   }
 
+  Future<void> deleteInventoryItem(String farmerId, String itemId) async {
+  try {
+    // Reference to the farmer's document
+    final farmerDocRef = _firestore.collection('farmers').doc(farmerId);
+
+    // Delete the item from the inventory sub-collection
+    await farmerDocRef.collection('inventory').doc(itemId).delete();
+
+    notifyListeners();  // Notify listeners to update the UI or perform actions
+  } catch (e) {
+    print("Failed to delete inventory item: $e");
+    // Handle errors as needed
+  }
+}
+
 }

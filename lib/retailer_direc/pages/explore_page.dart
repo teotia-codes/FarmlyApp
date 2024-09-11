@@ -1,24 +1,29 @@
-
+import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
+import 'package:app/provider/farmer/farmer_provider.dart';
 import 'package:app/retailer_direc/components/offers_carousel.dart';
+import 'package:app/retailer_direc/models/product.dart';
 import 'package:app/retailer_direc/widgets/filter_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
 
-import '../data/product.dart';
 import '../widgets/product_card.dart';
+
 
 class ExplorePage extends StatelessWidget {
   const ExplorePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    FarmerProvider farmerProvider = Provider.of<FarmerProvider>(context, listen: true);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            //FILTER AND SEARCH TEXT FIELD
+            // FILTER AND SEARCH TEXT FIELD
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
@@ -48,7 +53,7 @@ class ExplorePage extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            return FilterDialog();
+                            return  FilterDialog();
                           },
                         );
                       },
@@ -58,59 +63,9 @@ class ExplorePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             const OffersCarousel(),
-            // //CONSULTATION CARD
-            // Padding(
-            //   padding: const EdgeInsets.only(bottom: 15.0),
-            //   child: SizedBox(
-            //     height: 170,
-            //     child: Card(
-            //       color: Colors.green.shade50,
-            //       elevation: 0.1,
-            //       shadowColor: Colors.green.shade50,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(12.0),
-            //         child: Row(
-            //           children: [
-            //             //TEXT HERE LIKE THIS
-            //             Flexible(
-            //               child: Column(
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   Text(
-            //                     "Free Consultation",
-            //                     style: Theme.of(context)
-            //                         .textTheme
-            //                         .titleLarge!
-            //                         .copyWith(
-            //                           color: Colors.green.shade700,
-            //                         ),
-            //                   ),
-            //                   const Text(
-            //                     "Get free consultation from our customer service",
-            //                   ),
-            //                   FilledButton(
-            //                     onPressed: () {},
-            //                     child: const Text("Call now"),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //             //IMAGE HERE LIKE THIS
-            //             Image.asset(
-            //               'assets/contact_us.png',
-            //               width: 140,
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            const SizedBox(height: 16),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,19 +81,38 @@ class ExplorePage extends StatelessWidget {
               ],
             ),
 
-            //FEATURED PRODUCTS
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: exampleProducts.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.8,
-              ),
-              itemBuilder: (context, index) {
-                return ProductCard(product: exampleProducts[index]);
+            // FEATURED PRODUCTS FROM FARMER INVENTORY
+            FutureBuilder<List<FarmerInventoryItem>>(
+              future: farmerProvider.getInventoryList('farmerA123'),  // Fetch inventory for specific farmer
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Failed to load products.'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No products available.'));
+                }
+
+                // If inventory items are fetched successfully
+                List<FarmerInventoryItem> inventoryItems = snapshot.data!;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: inventoryItems.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final item = inventoryItems[index];
+                    return ProductCard(
+                      product: Product(name: item.name, farmer: item.farmerID, description: "NULL", image: item.imageUrl, price: item.price , unit: "1", rating: 0),  // Update the `ProductCard` to accept a FarmerInventoryItem if needed
+                    );
+                  },
+                );
               },
             ),
           ],

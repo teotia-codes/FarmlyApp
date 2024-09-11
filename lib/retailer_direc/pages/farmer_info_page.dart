@@ -24,7 +24,7 @@ class _FarmerInfoState extends State<FarmerInfo> {
           farmer: widget.farmer.name,
           description: 'Description for ${item.name}', // You might want to improve the description
           image: item.imageUrl,
-          price: double.tryParse(item.price) ?? 0.0,
+          price: (item.price) ??" 0.0",
           unit: 'kg',
           rating: 4.0, // Provide a default or calculated rating
         ))

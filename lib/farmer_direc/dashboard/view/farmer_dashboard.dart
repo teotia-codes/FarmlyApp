@@ -431,7 +431,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                           ),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text("₹${exampleFarmers.revenueModel.totalProfit}",
+                            child: Text("₹${exampleFarmers.revenueModel.totalProfit.toStringAsFixed(1)}",
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
                           )
@@ -575,4 +575,5 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
       ],
     );
   }
+
 }
