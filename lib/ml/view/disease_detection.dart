@@ -6,12 +6,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart'; // For getting the filename
 
-class DiseaseDetection extends StatefulWidget {
+class DiseaseDetectionView extends StatefulWidget {
   @override
-  _DiseaseDetectionState createState() => _DiseaseDetectionState();
+  _DiseaseDetectionViewState createState() => _DiseaseDetectionViewState();
 }
 
-class _DiseaseDetectionState extends State<DiseaseDetection> {
+class _DiseaseDetectionViewState extends State<DiseaseDetectionView> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
   DiseaseInfo? _diseaseInfo;

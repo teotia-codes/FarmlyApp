@@ -1,9 +1,12 @@
-
 import 'package:app/farmer_direc/crowdfunding/view/crowdfunding_view.dart';
 import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/ratingandcredit/model/rating_model.dart';
 import 'package:app/farmer_direc/ratingandcredit/view/credit_and_rating_view.dart';
+import 'package:app/ml/data/disease_detection.dart';
+import 'package:app/ml/view/credit_view.dart';
+import 'package:app/ml/view/demand_forecast_view.dart';
+import 'package:app/ml/view/disease_detection.dart';
 import 'package:app/onboarding.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +56,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const OrderView(farmerId: "farmerA123",),
+                  builder: (context) => const OrderView(farmerId: "farmerA123"),
                 ),
               );
             },
@@ -79,7 +82,29 @@ class ProfilePage extends StatelessWidget {
             title: const Text("View your TrueCredit™️ score"),
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => CreditAndRatingView()));
+                  MaterialPageRoute(builder: (_) => CreditPredictionScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.insights,
+              color: Colors.black,
+            ),
+            title: const Text("Demand Forecasting"),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) =>  DemandForecastingScreen())); // Navigate to Demand Forecasting
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.local_hospital,
+              color: Colors.black,
+            ),
+            title: const Text("Disease Detection"),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) =>  DiseaseDetectionView())); // Navigate to Disease Detection
             },
           ),
           ListTile(
@@ -90,8 +115,9 @@ class ProfilePage extends StatelessWidget {
             title: const Text("Logout"),
             onTap: () {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => FoochiOnboardingView()),(route) => false, );
-
+                MaterialPageRoute(builder: (_) => FoochiOnboardingView()),
+                (route) => false,
+              );
             },
           ),
         ],

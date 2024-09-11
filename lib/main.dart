@@ -1,6 +1,7 @@
 import 'package:app/farmer_direc/navbar/navbar.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
+import 'package:app/farmer_direc/profile/view/farmer_profile_view.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/ml/view/credit_view.dart';
 import 'package:app/ml/view/demand_forecast_view.dart';
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: CreditPredictionScreen(),
+      home: ProfilePage(),
     );
   }
 }
