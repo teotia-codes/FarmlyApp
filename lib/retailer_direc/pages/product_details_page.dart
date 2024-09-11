@@ -87,15 +87,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 padding: const EdgeInsets.only(left: 4.0),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FarmerInfo(), // Implement farmer model then push it
-                      ),
-                    );
+                    
                   },
                   child: Text(
-                    "by ${widget.product.farmer}",
+                    "by ${widget.product.farmer}123",
                     style: const TextStyle(
                       color: Colors.blue,
                       fontStyle: FontStyle.italic,
@@ -179,7 +174,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+                ?.copyWith(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 10),
           RichText(
@@ -200,32 +195,36 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+                ?.copyWith(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 10),
           SizedBox(
-            height: 90,
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    image: DecorationImage(
-                      image: AssetImage(exampleProducts[index].image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
-              itemCount: exampleProducts.length,
-            ),
+  height: 120,
+  width: 120,
+  child: ListView.separated(
+    physics: const BouncingScrollPhysics(),
+    scrollDirection: Axis.horizontal,
+    itemBuilder: (context, index) {
+      final product = exampleProducts[index];
+      print("Displaying image for product: ${product.image}"); // Debug print
+      return Container(
+        width: 120,
+        height: 90,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          image: DecorationImage(
+            image: AssetImage("assets/${product.image}"),
+            fit: BoxFit.cover,
           ),
-          const SizedBox(height: 10),
+        ),
+      );
+    },
+    separatorBuilder: (context, index) => const SizedBox(width: 10),
+    itemCount: exampleProducts.length,
+  ),
+),
+
+          const SizedBox(height: 50),
           FilledButton.icon(
             onPressed: () async {
               try {
