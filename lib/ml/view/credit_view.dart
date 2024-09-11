@@ -56,7 +56,7 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
 
           setState(() {
             _predictionResult =
-                'Predicted Credit: ${predictionResponse.prediction[0]}';
+                'Predicted Credit: ${(predictionResponse.prediction[0]/2).toStringAsFixed(0)}';
           });
         } else {
           setState(() {
