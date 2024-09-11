@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:app/ml/data/credit_model.dart';
-import 'package:app/ml/response/credit_response.dart';
+import 'package:app/ml/response/credit_response.dart'; // Import your text styling
+import 'package:app/utils/appcolors.dart';
+import 'package:app/utils/texttheme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'
     as http; // Replace with the actual path for CreditModel and CreditPredictionResponse
@@ -56,7 +58,7 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
 
           setState(() {
             _predictionResult =
-                'Predicted Credit: ${(predictionResponse.prediction[0]/2).toStringAsFixed(0)}';
+                'Predicted Credit: ${(predictionResponse.prediction[0] / 2).toStringAsFixed(0)}';
           });
         } else {
           setState(() {
@@ -80,7 +82,11 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit Prediction'),
+        title: Text(
+          'Credit Prediction',
+          style: TextPref.opensans.copyWith(color: Colors.black),
+        ),
+        backgroundColor: AppColors.kBackground,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -91,7 +97,16 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
               // Crop Quality input field
               TextFormField(
                 controller: _cropQualityController,
-                decoration: InputDecoration(labelText: 'Crop Quality'),
+                decoration: InputDecoration(
+                  labelText: 'Crop Quality',
+                  labelStyle: TextPref.opensans,
+                  filled: true,
+                  fillColor: AppColors.PaleYellow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.kSecondary),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter crop quality';
@@ -99,10 +114,20 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               // Land Size input field
               TextFormField(
                 controller: _landSizeController,
-                decoration: InputDecoration(labelText: 'Land Size'),
+                decoration: InputDecoration(
+                  labelText: 'Land Size',
+                  labelStyle: TextPref.opensans,
+                  filled: true,
+                  fillColor: AppColors.PaleYellow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.kSecondary),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter land size';
@@ -110,10 +135,20 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               // CIBIL Score input field
               TextFormField(
                 controller: _cibilScoreController,
-                decoration: InputDecoration(labelText: 'CIBIL Score'),
+                decoration: InputDecoration(
+                  labelText: 'CIBIL Score',
+                  labelStyle: TextPref.opensans,
+                  filled: true,
+                  fillColor: AppColors.PaleYellow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.kSecondary),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter CIBIL score';
@@ -121,10 +156,20 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               // Ratings input field
               TextFormField(
                 controller: _ratingsController,
-                decoration: InputDecoration(labelText: 'Ratings'),
+                decoration: InputDecoration(
+                  labelText: 'Ratings',
+                  labelStyle: TextPref.opensans,
+                  filled: true,
+                  fillColor: AppColors.PaleYellow,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: AppColors.kSecondary),
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter ratings';
@@ -134,16 +179,33 @@ class _CreditPredictionScreenState extends State<CreditPredictionScreen> {
               ),
               SizedBox(height: 20),
               _isLoading
-                  ? CircularProgressIndicator() // Show loading indicator when fetching data
+                  ? CircularProgressIndicator(
+                      color: AppColors.Beige400,
+                    ) // Show loading indicator when fetching data
                   : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            AppColors.Beige400, // Button background color
+                        textStyle: TextPref.opensans.copyWith(
+                          color: Colors.black,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                      ),
                       onPressed: _submitData, // Submit data to API
                       child: Text('Get Prediction'),
                     ),
               SizedBox(height: 20),
               _predictionResult != null
-                  ? Text(_predictionResult!,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                  ? Text(
+                      _predictionResult!,
+                      style: TextPref.opensans.copyWith(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                    )
                   : SizedBox(), // Display prediction result
             ],
           ),
