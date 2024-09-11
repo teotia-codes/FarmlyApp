@@ -2,6 +2,7 @@ import 'package:app/farmer_direc/navbar/navbar.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/firebase_options.dart';
+import 'package:app/ml/view/demand_forecast_view.dart';
 import 'package:app/provider/farmer_retrieve.dart';
 import 'package:app/retailer_direc/models/ROrderViewModel.dart';
 import 'package:app/retailer_direc/pages/home_page.dart';
@@ -22,8 +23,9 @@ import 'package:app/razorpay/razorpay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(    options: DefaultFirebaseOptions.currentPlatform,
-); // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Initialize Firebase
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -67,7 +69,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: DemandForecastingScreen(),
     );
   }
 }
