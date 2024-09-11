@@ -8,7 +8,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           // PROFILE IMAGE
@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const OrderPage(),
+                  builder: (context) =>  RetailerOrderView(retailerId: 'retailerA123',),
                 ),
               );
             },

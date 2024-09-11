@@ -1,10 +1,15 @@
-
-import 'package:app/farmerinfo.dart';
+import 'package:app/farmer_direc/orders/model/order_model.dart'; 
+import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/retailer_direc/data/product.dart';
+import 'package:app/retailer_direc/models/ROrderViewModel.dart'; 
+import 'package:app/retailer_direc/models/order.dart' as Rorder;
 import 'package:app/retailer_direc/models/product.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:app/farmerinfo.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -18,10 +23,10 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   bool showingMore = false;
   late TapGestureRecognizer readMoreGestureRecognizer;
+  final Uuid uuid = Uuid(); // Create an instance of Uuid
 
   @override
   void initState() {
-    // TODO: implement initState
     readMoreGestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
         setState(() {
@@ -33,13 +38,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     readMoreGestureRecognizer.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    final rOrderProvider = Provider.of<ROrderProvider>(context, listen: false);
+
+    // Ensure that price is parsed to double
+    final double price = double.tryParse(widget.product.price) ?? 0.0;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Details"),
@@ -80,16 +90,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            FarmerInfo(), // implement farmer model then push it
-
+                        builder: (context) => FarmerInfo(), // Implement farmer model then push it
                       ),
                     );
                   },
                   child: Text(
                     "by ${widget.product.farmer}",
-                    // style: Theme.of(context).textTheme.bodyMedium,
-                    style: const TextStyle(color: Colors.blue, fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
@@ -108,7 +119,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: "₹${widget.product.price}",
+                      text: "₹$price",
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     TextSpan(
@@ -178,21 +189,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 TextSpan(
                   text: showingMore
                       ? widget.product.description
-                      : widget.product.description.substring(0, widget.product.description.length ),
+                      : widget.product.description.substring(0, widget.product.description.length),
                 ),
-                // TextSpan(
-                //   recognizer: readMoreGestureRecognizer,
-                //   text: showingMore ? " Read less" : " Read more",
-                //   style: TextStyle
-                //     color: Theme.of(context).colorScheme.primary,
-                //   ),
-                // ),
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Text(
             "Related Products",
             style: Theme.of(context)
@@ -225,10 +227,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
           const SizedBox(height: 10),
           FilledButton.icon(
-            onPressed: () {},
+            onPressed: () async {
+              try {
+                final order = OrderModel(
+                  orderID: uuid.v4(), // Generate a unique order ID
+                  itemID: uuid.v4(), // Generate a unique item ID
+                  itemPrice: price, // Use the parsed double
+                  itemCount: 1,
+                  status: OrderStatus.inTransit, // Set appropriate status
+                );
+
+                final rorder = Rorder.ROrderModel(
+                  orderID: uuid.v4(), // Generate a unique order ID
+                  itemID: uuid.v4(), // Generate a unique item ID
+                  itemPrice: price, // Use the parsed double
+                  itemCount: 1,
+                  status: Rorder.OrderStatus.inTransit, // Set appropriate status
+                );
+
+                // Add order to farmer's collection
+                await orderProvider.addOrder('farmerA123', order);
+
+                // Add order to retailer's collection
+                await rOrderProvider.addOrder('retailerA123', rorder);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Order placed successfully!')),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Failed to place order: $e')),
+                );
+              }
+            },
             icon: const Icon(IconlyLight.bag2),
-            label: const Text("Add to card"),
-          )
+            label: const Text("Buy"),
+          ),
         ],
       ),
     );

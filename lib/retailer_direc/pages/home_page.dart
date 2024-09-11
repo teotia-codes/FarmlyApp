@@ -1,8 +1,8 @@
 
-import 'package:app/farmer_direc/profile/view/farmer_profile_view.dart';
 import 'package:app/retailer_direc/pages/cart_page.dart';
 import 'package:app/retailer_direc/pages/explore_page.dart';
 import 'package:app/retailer_direc/pages/products_view.dart';
+import 'package:app/retailer_direc/pages/profile_page.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';

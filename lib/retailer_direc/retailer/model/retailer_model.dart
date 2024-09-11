@@ -42,3 +42,13 @@ class RetailerAccount {
     );
   }
 }
+
+
+RetailerAccount retailerA = RetailerAccount(
+  retailerId: "retailerA123",
+  name: "Retailer A",
+  email: "retailerA@example.com",
+  gstin: "29ABCDE1234F2Z5",  // Example GSTIN format
+  phoneNumber: "+91-9876543210",
+  address: "123 Market Street, Cityville, India",
+);

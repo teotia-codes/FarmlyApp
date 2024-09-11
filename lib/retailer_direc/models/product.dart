@@ -3,7 +3,7 @@ class Product {
   final String farmer;
   final String description;
   final String image;
-  final double price;
+  final String price;
   final String unit;
   final double rating;
 
