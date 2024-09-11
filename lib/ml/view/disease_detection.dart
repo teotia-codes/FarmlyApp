@@ -28,7 +28,8 @@ class _DiseaseDetectionState extends State<DiseaseDetection> {
   Future<void> _uploadImage() async {
     if (_image == null) return;
 
-    const String url = 'http://example.com/upload'; // Replace with your API URL
+    const String url =
+        'http://192.168.45.92:5000/predict/disease'; // Replace with your API URL
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(

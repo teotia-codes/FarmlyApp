@@ -34,7 +34,8 @@ class CreditModel {
 
   // Method to send the data to the API
   Future<void> sendDataToAPI() async {
-    const String url = 'http://172.16.45.31:5000/predict/credit'; // API URL for credit prediction
+    const String url =
+        'http://192.168.45.92:5000/predict/credit'; // API URL for credit prediction
 
     try {
       var headers = {'Content-Type': 'application/json'};

@@ -33,32 +33,32 @@ class DemandModel {
   }
 
 // Method to send the data to the API
-Future<void> sendDataToAPI() async {
-  const String url = 'http://172.16.45.31:5000/predict/demand'; // API URL
+  Future<void> sendDataToAPI() async {
+    const String url = 'http://192.168.45.92:5000/predict/demand'; // API URL
 
-  try {
-    var headers = {'Content-Type': 'application/json'};
+    try {
+      var headers = {'Content-Type': 'application/json'};
 
-    // Convert the DemandModel to JSON format
-    var body = jsonEncode(this.toJson());
+      // Convert the DemandModel to JSON format
+      var body = jsonEncode(this.toJson());
 
-    // Make the POST request
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-    );
+      // Make the POST request
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
 
-    // Handle the response
-    if (response.statusCode == 200) {
-      print('Data uploaded successfully');
-      print('Response body: ${response.body}');
-    } else {
-      print('Failed to upload data: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // Handle the response
+      if (response.statusCode == 200) {
+        print('Data uploaded successfully');
+        print('Response body: ${response.body}');
+      } else {
+        print('Failed to upload data: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
     }
-  } catch (e) {
-    print('Error occurred: $e');
   }
-}
 }
