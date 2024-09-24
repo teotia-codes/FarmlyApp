@@ -1,0 +1,44 @@
+name: Android-apk-build
+on:
+  push:
+    branches:
+      - main
+      - test
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: 🤖 Android Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      
+      - name: Get dependencies
+        run: flutter pub get
+      
+      - name: Build APK
+        run: flutter build apk --release
+      
+      - name: Upload APK to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          tag: v1.0
+          overwrite: true
+          body: "This is the first release"
