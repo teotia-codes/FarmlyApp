@@ -13,7 +13,6 @@ import 'package:app/utils/texttheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class FarmerDashboardView extends StatefulWidget {
   const FarmerDashboardView({super.key});
 
@@ -82,8 +81,11 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
       ),
       GestureDetector(
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => CreditAndRatingView(rating: "4.3",value: 76,)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => CreditAndRatingView(
+                    rating: "4.3",
+                    value: 76,
+                  )));
         },
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -189,8 +191,8 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => FarmerInventoryView()));
+              // Navigator.of(context).push(
+              //     MaterialPageRoute(builder: (_) => FarmerInventoryView()));
             },
             icon: Icon(
               Icons.chevron_right_rounded,
@@ -431,7 +433,8 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                           ),
                           FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text("₹${exampleFarmers.revenueModel.totalProfit.toStringAsFixed(1)}",
+                            child: Text(
+                              "₹${exampleFarmers.revenueModel.totalProfit.toStringAsFixed(1)}",
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
                           )
@@ -447,7 +450,8 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => OrderView(farmerId: "farmerA123",
+                          builder: (_) => OrderView(
+                                farmerId: "farmerA123",
                                 initialSortOption: 'completed',
                               )));
                     },
@@ -486,7 +490,8 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => OrderView(farmerId: "farmerA123",
+                          builder: (_) => OrderView(
+                                farmerId: "farmerA123",
                                 initialSortOption: 'inTransit',
                               )));
                     },
@@ -575,5 +580,4 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
       ],
     );
   }
-
 }
