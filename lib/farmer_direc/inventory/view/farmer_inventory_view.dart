@@ -6,7 +6,7 @@ import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerInventoryView extends StatefulWidget {
   const FarmerInventoryView({super.key});
@@ -27,7 +27,7 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
       backgroundColor: AppColors.kBackground,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.yourInventory,
+          "AppLocalizations.of(context)!.yourInventory",
           textAlign: TextAlign.center,
           style: TextPref.opensans.copyWith(
             fontWeight: FontWeight.bold,
@@ -46,10 +46,10 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
           } else if (snapshot.hasError) {
             return Center(
                 child:
-                    Text(AppLocalizations.of(context)!.errorLoadingInventory));
+                    Text("AppLocalizations.of(context)!.errorLoadingInventory"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(
-                child: Text(AppLocalizations.of(context)!.noInventoryItems));
+                child: Text("AppLocalizations.of(context)!.noInventoryItems"));
           }
 
           List<FarmerInventoryItem> listofItems = snapshot.data!;
@@ -104,8 +104,8 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                       ),
                       child: Text(
                         isEditToggled
-                            ? AppLocalizations.of(context)!.done
-                            : AppLocalizations.of(context)!.editInventory,
+                            ? "AppLocalizations.of(context)!.done"
+                            : "AppLocalizations.of(context)!.editInventory",
                         style: TextPref.opensans.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -127,38 +127,34 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                             return AlertDialog(
                               backgroundColor: AppColors.kBackground,
                               title: Text(
-                                  AppLocalizations.of(context)!.addNewItem),
+                                  "AppLocalizations.of(context)!.addNewItem"),
                               content: SingleChildScrollView(
                                 child: Column(
                                   children: [
                                     TextField(
                                       controller: itemIdController,
                                       decoration: InputDecoration(
-                                        labelText: AppLocalizations.of(context)!
-                                            .itemId,
+                                        labelText: "AppLocalizations.of(context)!.itemId",
                                       ),
                                     ),
                                     TextField(
                                       controller: nameController,
                                       decoration: InputDecoration(
-                                        labelText: AppLocalizations.of(context)!
-                                            .itemName,
+                                        labelText: "AppLocalizations.of(context)!.itemName",
                                       ),
                                     ),
                                     TextField(
                                       controller: priceController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: AppLocalizations.of(context)!
-                                            .pricePerKg,
+                                        labelText: "AppLocalizations.of(context)!.pricePerKg",
                                       ),
                                     ),
                                     TextField(
                                       controller: kgController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: AppLocalizations.of(context)!
-                                            .quantityKgs,
+                                        labelText: "AppLocalizations.of(context)!.quantityKgs",
                                       ),
                                     ),
                                   ],
@@ -195,14 +191,14 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                                     }
                                   },
                                   child:
-                                      Text(AppLocalizations.of(context)!.add),
+                                      Text("AppLocalizations.of(context)!.add"),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                   child: Text(
-                                      AppLocalizations.of(context)!.cancel),
+                                      "AppLocalizations.of(context)!.cancel"),
                                 ),
                               ],
                             );

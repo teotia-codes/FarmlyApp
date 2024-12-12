@@ -1,4 +1,5 @@
 import 'package:app/farmer_direc/commodity/view/commodity_view.dart';
+import 'package:app/farmer_direc/community/view/utils_intermediate.dart';
 import 'package:app/farmer_direc/dashboard/view/farmer_dashboard.dart';
 import 'package:app/farmer_direc/navbar/navbar.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
@@ -19,7 +20,7 @@ import 'package:app/retailer_direc/retailer/model/retailer_upload.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
 import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
@@ -28,7 +29,7 @@ import 'package:app/onboarding.dart';
 import 'package:app/provider/farmer/farmer_provider.dart';
 import 'package:app/provider/farmer_upload.dart';
 import 'package:app/razorpay/razorpay.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,24 +79,24 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('hi'), // Hindi
-        Locale('te'), // Telugu
-      ],
+      // localizationsDelegates: [
+      //   AppLocalizations.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // supportedLocales: const [
+      //   Locale('en'), // English
+      //   Locale('hi'), // Hindi
+      //   Locale('te'), // Telugu
+      // ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
 
-      home: const NavBar(),
+      home:  UtilsScreenCommunity(),
 
 
     );
