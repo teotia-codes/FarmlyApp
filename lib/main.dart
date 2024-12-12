@@ -17,6 +17,8 @@ import 'package:app/retailer_direc/pages/home_page.dart';
 import 'package:app/retailer_direc/pages/order_page.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_provider.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_upload.dart';
+import 'package:app/retailer_direc/widgets/rating_submit.dart';
+import 'package:app/utils/orders_upload.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,6 +49,7 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => InventoryProvider(exampleInventoryItems),
           ),
+      
           ChangeNotifierProvider(
             create: (_) => FarmerProvider(),
           ),
@@ -96,7 +99,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
 
-      home:  UtilsScreenCommunity(),
+      home:  OrdersUpload(),
 
 
     );

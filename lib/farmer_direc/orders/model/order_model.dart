@@ -23,7 +23,7 @@ class OrderModel {
       'orderID':orderID,
       'itemPrice': itemPrice,
       'itemCount': itemCount,
-      'status': status.toString().split('.').last,  // Store the status as a string
+      'status': status.toString().split('.').last,  // Store the status as a string.
       'rating': rating,
     };
   }
