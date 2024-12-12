@@ -234,19 +234,30 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   itemID: uuid.v4(), // Generate a unique item ID
                   itemPrice: price, // Use the parsed double
                   itemCount: 1,
+                  amount: price* 1,
+                  farmerID: "farmerA123",
+                  itemName: "Barley",
+                  retailerID: "retailerA123",
+                  rating: 0,
                   status: OrderStatus.inTransit, // Set appropriate status
                 );
 
-                final rorder = Rorder.ROrderModel(
-                  orderID: uuid.v4(), // Generate a unique order ID
-                  itemID: uuid.v4(), // Generate a unique item ID
-                  itemPrice: price, // Use the parsed double
-                  itemCount: 1,
-                  status: Rorder.OrderStatus.inTransit, // Set appropriate status
-                );
+                
+final rorder = Rorder.ROrderModel(
+  orderID: const Uuid().v4(), // Generate a unique order ID
+  farmerID: "farmerA123", // Replace with the appropriate farmerID
+  retailerID: "retailerA123", // Replace with the appropriate retailerID
+  itemID: const Uuid().v4(), // Generate a unique item ID
+  itemName: "Example Item", // Replace with the appropriate item name
+  itemPrice: price, // Use the parsed double
+  itemCount: 1,
+  status: Rorder.OrderStatus.inTransit, // Set appropriate status
+  rating: 0, // Default rating to 0
+);
+
 
                 // Add order to farmer's collection
-                await orderProvider.addOrder('farmerA123', order);
+                await orderProvider.addOrder(order);
 
                 // Add order to retailer's collection
                 await rOrderProvider.addOrder('retailerA123', rorder);

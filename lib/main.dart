@@ -29,7 +29,6 @@ import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
 import 'package:app/farmerinfo.dart';
 import 'package:app/onboarding.dart';
 import 'package:app/provider/farmer/farmer_provider.dart';
-import 'package:app/provider/farmer_upload.dart';
 import 'package:app/razorpay/razorpay.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -99,7 +98,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
 
-      home:  OrdersUpload(),
+      home:  HomePage(),
 
 
     );

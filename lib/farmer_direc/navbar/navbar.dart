@@ -21,7 +21,7 @@ class _NavBarState extends State<NavBar> {
 
   List<Widget> screenList = [
     FarmerDashboardView(),
-    OrderView(farmerId: "farmerA123",),
+    OrderView(),
     // CommunityPage(),
     FarmerInventoryView(),
     ProfilePage()

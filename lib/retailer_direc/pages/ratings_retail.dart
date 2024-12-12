@@ -1,19 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/retailer_direc/models/order.dart';
-import 'package:app/retailer_direc/pages/cross_rating.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
 import 'package:flutter/material.dart';
 
 class GiveRatingsScreen extends StatefulWidget {
-  final ROrderModel order;
-  final String retailerId;
-  final String farmerId;
+  final String orderId;
 
   const GiveRatingsScreen({
     Key? key,
-    required this.order,
-    required this.retailerId,
-    required this.farmerId,
+    required this.orderId,
   }) : super(key: key);
 
   @override
@@ -24,9 +20,48 @@ class _GiveRatingsScreenState extends State<GiveRatingsScreen> {
   int _rating = 0;
   bool _isSubmitting = false;
   final TextEditingController _reviewController = TextEditingController();
-  final CrossCollectionRatingService _ratingService = CrossCollectionRatingService();
+  ROrderModel? _order;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchOrderDetails();
+  }
+
+  Future<void> _fetchOrderDetails() async {
+    try {
+      // Fetch the specific order using the order ID
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(widget.orderId)
+          .get();
+
+      if (docSnapshot.exists) {
+        setState(() {
+          _order = ROrderModel.fromFirestore(docSnapshot.data()!);
+        });
+      } else {
+        // Handle case where order is not found
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Order not found')),
+        );
+      }
+    } catch (e) {
+      print('Error fetching order details: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load order details')),
+      );
+    }
+  }
 
   Future<void> _submitRating() async {
+    if (_order == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Order details not loaded')),
+      );
+      return;
+    }
+
     if (_rating == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please select a rating before submitting.')),
@@ -38,21 +73,22 @@ class _GiveRatingsScreenState extends State<GiveRatingsScreen> {
       _isSubmitting = true;
     });
 
-    final success = await _ratingService.submitCrossCollectionRating(
-      retailerId: widget.retailerId,
-      farmerId: widget.farmerId,
-      retailerOrderId: widget.order.orderID,
-      itemId: widget.order.itemID,
-      rating: _rating,
-      reviewText: _reviewController.text.trim(),
-    );
+    try {
+      // Update the order document in Firestore
+      await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(widget.orderId)
+          .update({
+        'rating': _rating,
+        'reviewText': _reviewController.text.trim(),
+      });
 
-    if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Rating submitted successfully!')),
       );
       Navigator.pop(context);
-    } else {
+    } catch (e) {
+      print('Error submitting rating: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to submit rating. Try again.')),
       );
@@ -65,6 +101,16 @@ class _GiveRatingsScreenState extends State<GiveRatingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_order == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Rate Order'),
+          backgroundColor: AppColors.kBackground,
+        ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Rate Order'),
@@ -75,7 +121,8 @@ class _GiveRatingsScreenState extends State<GiveRatingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Order ID: ${widget.order.orderID}', style: TextPref.opensans),
+            Text('Order ID: ${_order!.orderID}', style: TextPref.opensans),
+            Text('Item: ${_order!.itemName}', style: TextPref.opensans),
             const SizedBox(height: 16),
             Text('Rate this order:', style: TextPref.opensans),
             Row(
