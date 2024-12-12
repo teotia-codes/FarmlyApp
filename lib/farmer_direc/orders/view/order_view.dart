@@ -54,7 +54,7 @@ class _OrderViewState extends State<OrderView> {
         elevation: 1,
         actions: [
           PopupMenuButton<String>(
-            icon: Icon(Icons.filter_list_rounded),
+            icon: const Icon(Icons.filter_list_rounded),
             onSelected: (String result) {
               setState(() {
                 _selectedSortOption = result;
@@ -98,15 +98,15 @@ class _OrderViewState extends State<OrderView> {
               ),
             ],
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
       body: orderProvider.orders.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.separated(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               itemCount: filteredOrders.length,
-              separatorBuilder: (context, index) => SizedBox(height: 16),
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final order = filteredOrders[index];
 
@@ -137,11 +137,11 @@ class _OrderViewState extends State<OrderView> {
                   },
 
                   child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                     tileColor: AppColors.PaleYellow,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(color: AppColors.kBackground, width: 1),
+                      side: const BorderSide(color: AppColors.kBackground, width: 1),
                     ),
                     title: Text(
                       'Order ID: ${order.orderID}',
