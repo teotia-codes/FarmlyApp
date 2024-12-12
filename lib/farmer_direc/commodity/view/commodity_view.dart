@@ -43,14 +43,43 @@ class _MarketDataPageState extends State<MarketDataPage> {
     }
   }
 
+  Future<void> loadData(String district) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final request = MarketDataRequest(
+      apiKey: '579b464db66ec23bdd0000011926b59910234b2c418e8e88ec4c0c22',
+      format: 'json',
+      limit: 100,
+      filters: {
+        'District.keyword': district,
+      },
+    );
+
+    try {
+      final response = await fetchMarketData(request);
+      setState(() {
+        marketData = CommodityPrice.parseList(response['records']);
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   void _submit() {
     String district = _districtController.text.trim();
     String commodity = _commodityController.text.trim();
-
-    if (district.isNotEmpty && commodity.isNotEmpty) {
-      loadMarketData(district, commodity);
-    } else {
+    if (district.isEmpty && commodity.isEmpty) {
       print('Please enter both a district and a commodity');
+    } else if ((district.isNotEmpty && commodity.isEmpty)) {
+      loadData(district);
+    } else {
+      loadMarketData(district, commodity);
     }
   }
 

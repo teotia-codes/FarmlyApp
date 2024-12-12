@@ -1,8 +1,6 @@
 import 'package:app/onboarding.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class VerificationScreen extends StatefulWidget {
   @override
@@ -14,7 +12,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   final TextEditingController gstinController = TextEditingController();
 
-   final TextEditingController bussaddr = TextEditingController();
+  final TextEditingController bussaddr = TextEditingController();
 
   String? selectedFilePath;
 
@@ -30,39 +28,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-              GestureDetector(
-              onTap: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
-                
-                if (result != null) {
-                  setState(() {
-                    selectedFilePath = result.files.single.path;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Selected file: $selectedFilePath'),
-                  ));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('No file selected'),
-                  ));
-                }
-              },
+            GestureDetector(
+              onTap: () async {},
               child: Padding(
-                padding: const EdgeInsets.only(left: 70,right: 70),
+                padding: const EdgeInsets.only(left: 70, right: 70),
                 child: Container(
-                  width: 10,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  alignment: Alignment.center,
-                  child: SvgPicture.asset('assets/file.svg')
-                ),
+                    width: 10,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    alignment: Alignment.center,
+                    child: SvgPicture.asset('assets/file.svg')),
               ),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: aadhaarController,
               keyboardType: TextInputType.number,
@@ -87,7 +71,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
             ),
             const SizedBox(height: 30),
-             TextField(
+            TextField(
               controller: bussaddr,
               decoration: const InputDecoration(
                 labelText: 'Bussiness address',
@@ -96,7 +80,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 ),
               ),
-            ),            
+            ),
             const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.only(left: 200, right: 200),
@@ -104,7 +88,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 onTap: () {
                   String aadhaarNumber = aadhaarController.text.trim();
                   String gstin = gstinController.text.trim();
-              
+
                   if (_validateAadhaar(aadhaarNumber) &&
                       _validateGstin(gstin) &&
                       selectedFilePath != null) {
@@ -114,7 +98,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Invalid Aadhaar, GSTIN, or no file selected!'),
+                      content:
+                          Text('Invalid Aadhaar, GSTIN, or no file selected!'),
                     ));
                   }
                 },
