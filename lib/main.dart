@@ -19,7 +19,12 @@ import 'package:app/retailer_direc/pages/home_page.dart';
 import 'package:app/retailer_direc/pages/order_page.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_provider.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_upload.dart';
+
+import 'package:app/retailer_direc/widgets/rating_submit.dart';
+import 'package:app/utils/orders_upload.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +35,6 @@ import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
 import 'package:app/farmerinfo.dart';
 import 'package:app/onboarding.dart';
 import 'package:app/provider/farmer/farmer_provider.dart';
-import 'package:app/provider/farmer_upload.dart';
 import 'package:app/razorpay/razorpay.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -50,6 +54,7 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => InventoryProvider(exampleInventoryItems),
           ),
+      
           ChangeNotifierProvider(
             create: (_) => FarmerProvider(),
           ),
@@ -99,7 +104,9 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
 
+
       home: NavBar(),
+
     );
   }
 }

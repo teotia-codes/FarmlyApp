@@ -1,50 +1,52 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/farmer_direc/supply_chain/view/supply_chain_view.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
 
 class OrderView extends StatefulWidget {
-  final String farmerId;
-  final String? initialSortOption; // Nullable to allow default value
-
-  const OrderView({super.key, required this.farmerId, this.initialSortOption});
-
   @override
-  State<OrderView> createState() => _OrderViewState();
+  _OrderViewState createState() => _OrderViewState();
 }
 
 class _OrderViewState extends State<OrderView> {
-  late String _selectedSortOption;
+  List<OrderModel> _farmerOrders = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedSortOption = widget.initialSortOption ?? 'All';
-    // Fetch orders when the screen is initialized
-    Future.microtask(() {
-      Provider.of<OrderProvider>(context, listen: false)
-          .fetchOrders(widget.farmerId);
-    });
+    _fetchFarmerOrders();
+  }
+
+  Future<void> _fetchFarmerOrders() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .where('farmerID', isEqualTo: 'farmerA123')
+          .get();
+
+      setState(() {
+        _farmerOrders = querySnapshot.docs.map((doc) {
+          return OrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+        }).toList();
+      });
+    } catch (e) {
+      print('Error fetching farmer orders: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final orderProvider = Provider.of<OrderProvider>(context);
-    final orders = orderProvider.orders;
-
-    List<OrderModel> filteredOrders = orders.where((order) {
-      if (_selectedSortOption == 'All') return true;
-      return _selectedSortOption == order.status.toString().split('.').last;
-    }).toList();
-
     return Scaffold(
       backgroundColor: AppColors.kBackground,
       appBar: AppBar(
         title: Text(
-          'Order List',
+          'Farmer Orders',
           style: TextPref.opensans.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -52,63 +54,18 @@ class _OrderViewState extends State<OrderView> {
         ),
         backgroundColor: AppColors.kBackground,
         elevation: 1,
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.filter_list_rounded),
-            onSelected: (String result) {
-              setState(() {
-                _selectedSortOption = result;
-              });
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'All',
-                child: Text(
-                  'All',
-                  style: TextPref.opensans.copyWith(fontSize: 16),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'inTransit',
-                child: Text(
-                  'In Transit',
-                  style: TextPref.opensans.copyWith(fontSize: 16),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'completed',
-                child: Text(
-                  'Completed',
-                  style: TextPref.opensans.copyWith(fontSize: 16),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'confirmed',
-                child: Text(
-                  'Confirmed',
-                  style: TextPref.opensans.copyWith(fontSize: 16),
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'canceled',
-                child: Text(
-                  'Canceled',
-                  style: TextPref.opensans.copyWith(fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 16),
-        ],
+
       ),
-      body: orderProvider.orders.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+      body: _farmerOrders.isEmpty
+          ? Center(child: CircularProgressIndicator())
           : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: filteredOrders.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              padding: EdgeInsets.all(16),
+              itemCount: _farmerOrders.length,
+              separatorBuilder: (context, index) => SizedBox(height: 16),
+
+       
               itemBuilder: (context, index) {
-                final order = filteredOrders[index];
+                final order = _farmerOrders[index];
 
                 Color statusColor;
                 switch (order.status) {

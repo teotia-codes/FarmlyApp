@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:app/farmer_direc/dashboard/model/commodity_model.dart';
+import 'package:app/farmer_direc/dashboard/model/exampleFarmer.dart';
 import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
 import 'package:app/farmer_direc/dashboard/view/inventory_scrollview_item.dart';
 import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
@@ -10,8 +11,10 @@ import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/farmer_direc/ratingandcredit/view/credit_and_rating_view.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FarmerDashboardView extends StatefulWidget {
   const FarmerDashboardView({super.key});
@@ -21,8 +24,10 @@ class FarmerDashboardView extends StatefulWidget {
 }
 
 class _FarmerDashboardViewState extends State<FarmerDashboardView> {
+  
   @override
   Widget build(BuildContext context) {
+    OrderProvider orderProviderHere = Provider.of<OrderProvider>(context);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: DashboardAppBar(size),
@@ -37,7 +42,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Insights(size),
+                Insights(size, orderProviderHere),
                 SizedBox(
                   height: 30,
                 ),
@@ -341,7 +346,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
     );
   }
 
-  Column Insights(Size size) {
+  Column Insights(Size size, OrderProvider orderProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -400,7 +405,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               "₹" +
-                                  exampleFarmer.revenueModel.totalRevenue
+                                  exampleFarmer1.revenueModel.totalRevenue
                                       .toStringAsFixed(1),
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),
@@ -451,8 +456,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => OrderView(
-                                farmerId: "farmerA123",
-                                initialSortOption: 'completed',
+
                               )));
                     },
                     child: Container(
@@ -478,8 +482,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                exampleOrderViewModel
-                                    .returnCompletedOrders()
+                                orderProvider.getCompletedOrdersCount()
                                     .toString(),
                                 style: TextPref.opensans.copyWith(fontSize: 38),
                               ),
@@ -491,8 +494,7 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => OrderView(
-                                farmerId: "farmerA123",
-                                initialSortOption: 'inTransit',
+
                               )));
                     },
                     child: Container(
@@ -518,8 +520,8 @@ class _FarmerDashboardViewState extends State<FarmerDashboardView> {
                           FittedBox(
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              exampleOrderViewModel
-                                  .returnInTransitOrders()
+                              orderProvider
+                                  .getInTransitOrdersCount()
                                   .toString(),
                               style: TextPref.opensans.copyWith(fontSize: 38),
                             ),

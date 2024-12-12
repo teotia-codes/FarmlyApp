@@ -1,5 +1,6 @@
 
 
+import 'package:app/farmer_direc/dashboard/model/exampleFarmer.dart';
 import 'package:app/farmer_direc/dashboard/model/farmer_model.dart';
 import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
 import 'package:app/farmer_direc/ratingandcredit/model/rating_model.dart';
@@ -14,4 +15,5 @@ List<double> exRatings = [4.2, 5.0, 3.2, 4.8, 3.5, 4.0, 3.9, 5.0, 5.0]; // Dummy
 TrueCredit exampleTrueCredit = TrueCredit(ratings: exRatings, cibilScore: 700); // Dummy CIBIL score
 
 FarmerProfileModel exampleProfileModel = FarmerProfileModel(
-    farmerModel: exampleFarmer, trueCredit: exampleTrueCredit );
+    farmerModel: exampleFarmer1, trueCredit: exampleTrueCredit );
+
