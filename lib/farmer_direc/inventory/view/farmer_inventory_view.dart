@@ -1,3 +1,4 @@
+import 'package:app/farmer_direc/commodity/view/commodity_view.dart';
 import 'package:app/farmer_direc/inventory/model/farmer_inventory_model.dart';
 import 'package:app/farmer_direc/inventory/view/farmer_inventory_grid_item.dart';
 import 'package:app/farmer_direc/inventory/viewmodel/inventory_provider.dart';
@@ -6,10 +7,11 @@ import 'package:app/utils/appcolors.dart';
 import 'package:app/utils/texttheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerInventoryView extends StatefulWidget {
-  const FarmerInventoryView({super.key});
+  const FarmerInventoryView({
+    super.key,
+  });
 
   @override
   State<FarmerInventoryView> createState() => _FarmerInventoryViewState();
@@ -27,29 +29,35 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
       backgroundColor: AppColors.kBackground,
       appBar: AppBar(
         title: Text(
-          "AppLocalizations.of(context)!.yourInventory",
+          'Your Inventory',
           textAlign: TextAlign.center,
           style: TextPref.opensans.copyWith(
             fontWeight: FontWeight.bold,
             fontSize: 28,
           ),
         ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => MarketDataPage()));
+              },
+              child: Text("Check live prices"))
+        ],
         centerTitle: true,
         backgroundColor: AppColors.kBackground,
         foregroundColor: Colors.black,
       ),
       body: FutureBuilder<List<FarmerInventoryItem>>(
-        future: farmerProvider.getInventoryList('farmerA123'),
+        future: farmerProvider
+            .getInventoryList('farmerA123'), // Awaiting the async function
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-                child:
-                    Text("AppLocalizations.of(context)!.errorLoadingInventory"));
+            return Center(child: Text('Error loading inventory'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-                child: Text("AppLocalizations.of(context)!.noInventoryItems"));
+            return Center(child: Text('No inventory items available'));
           }
 
           List<FarmerInventoryItem> listofItems = snapshot.data!;
@@ -61,6 +69,7 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
               children: [
                 const SizedBox(height: 16),
 
+                // Grid view showing farmer inventory items
                 Expanded(
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -103,9 +112,7 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                             EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                       ),
                       child: Text(
-                        isEditToggled
-                            ? "AppLocalizations.of(context)!.done"
-                            : "AppLocalizations.of(context)!.editInventory",
+                        isEditToggled ? 'Done' : 'Edit Inventory',
                         style: TextPref.opensans.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -122,39 +129,40 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                             final nameController = TextEditingController();
                             final priceController = TextEditingController();
                             final kgController = TextEditingController();
-                            final itemIdController = TextEditingController();
+                            final itemIdController =
+                                TextEditingController(); // New controller for itemId
 
                             return AlertDialog(
                               backgroundColor: AppColors.kBackground,
-                              title: Text(
-                                  "AppLocalizations.of(context)!.addNewItem"),
+                              title: Text("Add New Item"),
                               content: SingleChildScrollView(
                                 child: Column(
                                   children: [
                                     TextField(
-                                      controller: itemIdController,
+                                      controller:
+                                          itemIdController, // Field for itemId
                                       decoration: InputDecoration(
-                                        labelText: "AppLocalizations.of(context)!.itemId",
+                                        labelText: 'Item ID',
                                       ),
                                     ),
                                     TextField(
                                       controller: nameController,
                                       decoration: InputDecoration(
-                                        labelText: "AppLocalizations.of(context)!.itemName",
+                                        labelText: 'Item Name',
                                       ),
                                     ),
                                     TextField(
                                       controller: priceController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: "AppLocalizations.of(context)!.pricePerKg",
+                                        labelText: 'Price (₹/kg)',
                                       ),
                                     ),
                                     TextField(
                                       controller: kgController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: "AppLocalizations.of(context)!.quantityKgs",
+                                        labelText: 'Quantity (kgs)',
                                       ),
                                     ),
                                   ],
@@ -190,15 +198,21 @@ class _FarmerInventoryViewState extends State<FarmerInventoryView> {
                                       }
                                     }
                                   },
-                                  child:
-                                      Text("AppLocalizations.of(context)!.add"),
+                                  child: Text(
+                                    "Add",
+                                    style: TextPref.opensans
+                                        .copyWith(color: Colors.black),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                   child: Text(
-                                      "AppLocalizations.of(context)!.cancel"),
+                                    "Cancel",
+                                    style: TextPref.opensans
+                                        .copyWith(color: Colors.black),
+                                  ),
                                 ),
                               ],
                             );

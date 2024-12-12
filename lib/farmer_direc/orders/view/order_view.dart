@@ -1,4 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:app/farmer_direc/orders/viewmodel/orderViewModel.dart';
+import 'package:app/farmer_direc/supply_chain/view/supply_chain_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:app/farmer_direc/orders/model/order_model.dart';
 import 'package:app/utils/appcolors.dart';
@@ -49,6 +54,7 @@ class _OrderViewState extends State<OrderView> {
         ),
         backgroundColor: AppColors.kBackground,
         elevation: 1,
+
       ),
       body: _farmerOrders.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -56,6 +62,8 @@ class _OrderViewState extends State<OrderView> {
               padding: EdgeInsets.all(16),
               itemCount: _farmerOrders.length,
               separatorBuilder: (context, index) => SizedBox(height: 16),
+
+       
               itemBuilder: (context, index) {
                 final order = _farmerOrders[index];
 
@@ -77,32 +85,41 @@ class _OrderViewState extends State<OrderView> {
                     statusColor = Colors.grey;
                 }
 
-                return ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  tileColor: AppColors.PaleYellow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: AppColors.kBackground, width: 1),
-                  ),
-                  title: Text(
-                    'Order ID: ${order.orderID}',
-                    style: TextPref.opensans.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black,
+                return GestureDetector(
+                  onTap: () {
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) =>  SupplyChainPage(orderId: order.orderID, ))); // Navigate to Disease Detection
+
+                  },
+
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    tileColor: AppColors.PaleYellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: AppColors.kBackground, width: 1),
                     ),
-                  ),
-                  subtitle: Text(
-                    'Amount: \₹${(order.itemPrice * order.itemCount).toStringAsFixed(2)}\nStatus: ${order.status.toString().split('.').last}',
-                    style: TextPref.opensans.copyWith(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                      color: Colors.grey[700],
+                    title: Text(
+                      'Order ID: ${order.orderID}',
+                      style: TextPref.opensans.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  trailing: Icon(
-                    Icons.shopping_cart,
-                    color: statusColor,
+                    subtitle: Text(
+                      'Amount: \₹${(order.itemPrice * order.itemCount).toStringAsFixed(2)}\nStatus: ${order.status.toString().split('.').last}',
+                      style: TextPref.opensans.copyWith(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.shopping_cart,
+                      color: statusColor,
+                    ),
                   ),
                 );
               },

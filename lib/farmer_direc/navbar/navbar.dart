@@ -3,6 +3,7 @@ import 'package:app/farmer_direc/dashboard/view/farmer_dashboard.dart';
 import 'package:app/farmer_direc/inventory/view/farmer_inventory_view.dart';
 import 'package:app/farmer_direc/orders/view/order_view.dart';
 import 'package:app/farmer_direc/profile/view/farmer_profile_view.dart';
+import 'package:app/farmer_direc/supply_chain/view/supply_chain_view.dart';
 import 'package:app/utils/appcolors.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -21,8 +22,11 @@ class _NavBarState extends State<NavBar> {
 
   List<Widget> screenList = [
     FarmerDashboardView(),
-    OrderView(),
-    // CommunityPage(),
+
+    SupplyChainPage(
+      orderId: 'order123',
+    ),
+
     FarmerInventoryView(),
     ProfilePage()
   ];

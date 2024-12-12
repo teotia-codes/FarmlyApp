@@ -1,6 +1,6 @@
-import 'package:app/utils/appcolors.dart';
-import 'package:app/utils/texttheme.dart';
+import 'package:app/farmer_direc/community/view/utils_intermediate.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class CommunityPage extends StatefulWidget {
   @override
@@ -10,130 +10,401 @@ class CommunityPage extends StatefulWidget {
 class _CommunityPageState extends State<CommunityPage> {
   final List<Map<String, dynamic>> _initialCommunities = [
     {
+      'uid': Uuid().v4(),
       'name': 'AgroConnect',
       'location': 'Texas, USA',
       'members': 1200,
-      'nextDelivery': '15th Dec',
-      'stockPercent': 75
+      'stockPercent': 75,
+      'description':
+          'Connecting farmers across Texas, sharing resources and knowledge.',
+      'tags': ['Organic', 'Sustainable', 'Livestock']
     },
     {
+      'uid': Uuid().v4(),
       'name': 'Harvest Helpers',
       'location': 'Ontario, Canada',
       'members': 950,
-      'nextDelivery': '20th Dec',
-      'stockPercent': 60
-    },
-    {
-      'name': 'GreenGrowers',
-      'location': 'Queensland, Australia',
-      'members': 800,
-      'nextDelivery': '25th Dec',
-      'stockPercent': 85
-    },
-    {
-      'name': 'EcoFarmers',
-      'location': 'Kerala, India',
-      'members': 1500,
-      'nextDelivery': '30th Dec',
-      'stockPercent': 50
+      'stockPercent': 60,
+      'description':
+          'Supporting local farmers with innovative agricultural solutions.',
+      'tags': ['Crop Sharing', 'Technology', 'Innovation']
     },
   ];
 
+  // List to store pending community creation requests
+  final List<Map<String, dynamic>> _pendingCommunities = [];
+
   List<Map<String, dynamic>> communities = [];
+  List<Map<String, dynamic>> farmerIds = [
+    {'id': Uuid().v4(), 'name': 'John Doe', 'location': 'Texas'},
+    {'id': Uuid().v4(), 'name': 'Jane Smith', 'location': 'California'},
+    {'id': Uuid().v4(), 'name': 'Mike Johnson', 'location': 'Iowa'},
+    {'id': Uuid().v4(), 'name': 'Sarah Williams', 'location': 'Nebraska'},
+    {'id': Uuid().v4(), 'name': 'David Brown', 'location': 'Kansas'},
+    {'id': Uuid().v4(), 'name': 'Emily Davis', 'location': 'Oklahoma'},
+    {'id': Uuid().v4(), 'name': 'Tom Wilson', 'location': 'Missouri'},
+    {'id': Uuid().v4(), 'name': 'Lisa Garcia', 'location': 'Colorado'},
+    {'id': Uuid().v4(), 'name': 'Robert Taylor', 'location': 'New Mexico'},
+  ];
+
   final TextEditingController _searchController = TextEditingController();
-  String _sortBy = 'Members';
-  final List<String> _sortOptions = ['Members', 'Stock', 'Name'];
+  final TextEditingController _communityNameController =
+      TextEditingController();
+  final TextEditingController _communityLocationController =
+      TextEditingController();
+  final TextEditingController _communityDescriptionController =
+      TextEditingController();
+
+  List<Map<String, dynamic>> _selectedFarmers = [];
 
   @override
   void initState() {
     super.initState();
-    _initializeCommunities();
-  }
-
-  void _initializeCommunities() {
     communities = List.from(_initialCommunities);
   }
 
-  void _filterCommunities(String query) {
-    setState(() {
-      communities = _initialCommunities.where((community) {
-        final nameMatch = community['name']
-            .toString()
-            .toLowerCase()
-            .contains(query.toLowerCase());
-        final locationMatch = community['location']
-            .toString()
-            .toLowerCase()
-            .contains(query.toLowerCase());
-        return nameMatch || locationMatch;
-      }).toList();
+  void _createCommunity() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.9,
+              maxChildSize: 0.95,
+              minChildSize: 0.6,
+              builder: (_, controller) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: ListView(
+                    controller: controller,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              'Create New Community',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green[900],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 20),
 
-      // Re-apply sorting
-      _sortCommunities(_sortBy);
-    });
+                            // Community Name Input
+                            TextField(
+                              controller: _communityNameController,
+                              decoration: InputDecoration(
+                                labelText: 'Community Name',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+
+                            // Community Location Input
+                            TextField(
+                              controller: _communityLocationController,
+                              decoration: InputDecoration(
+                                labelText: 'Community Location',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+
+                            // Community Description Input
+                            TextField(
+                              controller: _communityDescriptionController,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                labelText: 'Community Description',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+
+                            // Select Farmers Section
+                            Text(
+                              'Select Initial Farmers (Minimum 9)',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green[800],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+
+                            // Farmers Selection List
+                            Container(
+                              height: 300,
+                              child: ListView.builder(
+                                itemCount: farmerIds.length,
+                                itemBuilder: (context, index) {
+                                  final farmer = farmerIds[index];
+                                  final isSelected =
+                                      _selectedFarmers.contains(farmer);
+
+                                  return CheckboxListTile(
+                                    title: Text(farmer['name']),
+                                    subtitle: Text(farmer['location']),
+                                    value: isSelected,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        if (value == true) {
+                                          _selectedFarmers.add(farmer);
+                                        } else {
+                                          _selectedFarmers.remove(farmer);
+                                        }
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+
+                            // Submit Button
+                            SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: _selectedFarmers.length >= 9
+                                  ? _submitCommunityRequest
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                iconColor: Colors.green[800],
+                                padding: EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                'Submit Community Request',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
-  void _sortCommunities(String sortBy) {
+  void _submitCommunityRequest() {
+    if (_communityNameController.text.isEmpty ||
+        _communityLocationController.text.isEmpty ||
+        _communityDescriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
+
+    final newCommunityRequest = {
+      'uid': Uuid().v4(),
+      'name': _communityNameController.text,
+      'location': _communityLocationController.text,
+      'description': _communityDescriptionController.text,
+      'members': _selectedFarmers.length,
+      'stockPercent': 0,
+      'tags': [],
+      'initialFarmers': _selectedFarmers,
+      'status': 'Pending Approval'
+    };
+
     setState(() {
-      _sortBy = sortBy;
-      switch (sortBy) {
-        case 'Members':
-          communities.sort((a, b) => b['members'].compareTo(a['members']));
-          break;
-        case 'Stock':
-          communities
-              .sort((a, b) => b['stockPercent'].compareTo(a['stockPercent']));
-          break;
-        case 'Name':
-          communities.sort((a, b) => a['name'].compareTo(b['name']));
-          break;
-      }
+      _pendingCommunities.add(newCommunityRequest);
     });
+
+    // Reset controllers and selected farmers
+    _communityNameController.clear();
+    _communityLocationController.clear();
+    _communityDescriptionController.clear();
+    _selectedFarmers.clear();
+
+    Navigator.pop(context);
+
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Community request submitted for approval'),
+        backgroundColor: Colors.green[800],
+      ),
+    );
   }
 
-  void _addCommunity() {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          'Farmer Communities',
+          style: TextStyle(
+            color: Colors.green[900],
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.pending, color: Colors.green[900]),
+            onPressed: () {
+              // Show pending communities
+              _showPendingCommunities();
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: communities.length,
+        itemBuilder: (context, index) {
+          final community = communities[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => UtilsScreenCommunity())),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        community['name'],
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green[900],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        community['location'],
+                        style: TextStyle(
+                          color: Colors.green[700],
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Text(
+                        community['description'],
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${community['members']} Members',
+                            style: TextStyle(
+                              color: Colors.green[800],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Join community logic
+                            },
+                            style: ElevatedButton.styleFrom(
+                              iconColor: Colors.green[800],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text('Join'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _createCommunity,
+        backgroundColor: Colors.green[800],
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showPendingCommunities() {
     showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController nameController = TextEditingController();
-        final TextEditingController locationController = TextEditingController();
         return AlertDialog(
-          title: Text('Add New Community'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'Name'),
+          title: Text('Pending Community Requests'),
+          content: _pendingCommunities.isEmpty
+              ? Text('No pending community requests.')
+              : SingleChildScrollView(
+                  child: Column(
+                    children: _pendingCommunities.map((community) {
+                      return ListTile(
+                        title: Text(community['name']),
+                        subtitle: Text(community['location']),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.check, color: Colors.green),
+                              onPressed: () {
+                                // Approve community
+                                _approveCommunity(community);
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.close, color: Colors.red),
+                              onPressed: () {
+                                // Reject community
+                                _rejectCommunity(community);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                TextField(
-                  controller: locationController,
-                  decoration: InputDecoration(labelText: 'Location'),
-                ),
-              ],
-            ),
-          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  communities.add({
-                    'name': nameController.text,
-                    'location': locationController.text,
-                    'members': 1,
-                    'nextDelivery': Null,
-                    'stockPercent': Null,
-                  });
-                  _sortCommunities(_sortBy);
-                });
-                Navigator.pop(context);
-              },
-              child: Text('Add'),
+              child: Text('Close'),
             ),
           ],
         );
@@ -141,203 +412,39 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  void _approveCommunity(Map<String, dynamic> community) {
+    setState(() {
+      // Remove from pending list
+      _pendingCommunities.remove(community);
+
+      // Add to active communities
+      communities.add({
+        ...community,
+        'status': 'Active',
+        'tags': ['New Community'],
+      });
+    });
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Community "${community['name']}" approved'),
+        backgroundColor: Colors.green[800],
+      ),
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kBackground,
-      appBar: AppBar(
-        title: Text(
-          'Community',
-          textAlign: TextAlign.center,
-          style: TextPref.opensans.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 28,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.kBackground,
-        foregroundColor: Colors.black,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: _filterCommunities,
-                    decoration: InputDecoration(
-                      hintText: 'Search communities...',
-                      prefixIcon: Icon(Icons.search, color: Colors.brown),
-                      filled: true,
-                      fillColor: Colors.yellow[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.yellow[200],
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: _sortBy,
-                        icon: Icon(Icons.sort, color: Colors.brown),
-                        dropdownColor: Colors.yellow[200],
-                        onChanged: (String? newValue) {
-                          if (newValue != null) {
-                            _sortCommunities(newValue);
-                          }
-                        },
-                        items: _sortOptions
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                value,
-                                style: TextStyle(color: Colors.brown),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: communities.length,
-              itemBuilder: (context, index) {
-                final community = communities[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 6.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.yellow[50],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.yellow.withOpacity(0.3),
-                          blurRadius: 6,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                community['name'],
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.teal[900],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.person,
-                                    size: 18,
-                                    color: Colors.teal[700],
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${community['members']}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.teal[700],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            community['location'],
-                            style: TextStyle(color: Colors.teal[700]),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Next Delivery:',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.teal[900],
-                                ),
-                              ),
-                              Text(
-                                community['nextDelivery'],
-                                style: TextStyle(
-                                  color: Colors.teal[700],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Stock Required:',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.teal[900],
-                                ),
-                              ),
-                              Text(
-                                '${community['stockPercent']}%',
-                                style: TextStyle(
-                                  color: Colors.teal[700],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addCommunity,
-        child: Icon(Icons.add),
-        backgroundColor: Colors.teal,
+  void _rejectCommunity(Map<String, dynamic> community) {
+    setState(() {
+      // Remove from pending list
+      _pendingCommunities.remove(community);
+    });
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Community "${community['name']}" rejected'),
+        backgroundColor: Colors.red[800],
       ),
     );
   }

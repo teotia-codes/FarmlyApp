@@ -1,4 +1,6 @@
+import 'package:app/data/firebase_upload.dart';
 import 'package:app/farmer_direc/commodity/view/commodity_view.dart';
+import 'package:app/farmer_direc/community/view/community_page.dart';
 import 'package:app/farmer_direc/community/view/utils_intermediate.dart';
 import 'package:app/farmer_direc/dashboard/view/farmer_dashboard.dart';
 import 'package:app/farmer_direc/navbar/navbar.dart';
@@ -17,8 +19,12 @@ import 'package:app/retailer_direc/pages/home_page.dart';
 import 'package:app/retailer_direc/pages/order_page.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_provider.dart';
 import 'package:app/retailer_direc/retailer/model/retailer_upload.dart';
+
 import 'package:app/retailer_direc/widgets/rating_submit.dart';
 import 'package:app/utils/orders_upload.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -98,8 +104,8 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
 
-      home:  HomePage(),
 
+      home: NavBar(),
 
     );
   }

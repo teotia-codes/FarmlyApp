@@ -4,7 +4,6 @@ import 'package:app/onboarding.dart';
 import 'package:app/retailer_direc/pages/home_page.dart';
 import 'package:app/retailer_direc/widgets/filter_dialog_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,22 +36,7 @@ class _FarmerInfo extends State<FarmerInfo> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               GestureDetector(
-                onTap: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-
-                  if (result != null) {
-                    setState(() {
-                      selectedFilePath = result.files.single.path;
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Selected file: $selectedFilePath'),
-                    ));
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No file selected')));
-                  }
-                },
+                onTap: () async {},
                 child: Padding(
                   padding: const EdgeInsets.only(left: 70, right: 70),
                   child: Container(
@@ -115,8 +99,9 @@ class _FarmerInfo extends State<FarmerInfo> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Verification Successful!'),
                       ));
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                          builder: (_) => HomePage()), (route) => false);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (_) => HomePage()),
+                          (route) => false);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
